@@ -158,6 +158,7 @@ int roomOccupation(String room, String start, String stop, int all) {
 boolean anyIn(String obj1, String[] obj2) {
   for (int i = 0; i<obj2.length; i++) {
     if (obj2[i] != null && (obj1.contains(obj2[i]) || obj2[i].contains(obj1))) {
+      println(obj1 + " " + obj2[i]);
       return true;
     }
   }
@@ -196,8 +197,8 @@ Event[] emptySchedule(String entity, String start, String stop) {
         empty[k + 1].timeStart = head;
         empty[k + 1].groupe = new String[1];
         empty[k + 1].groupe[0] = "S1G1";
-         empty[k + 1].summary = "";
-         empty[k + 1].location = new String[0];
+        empty[k + 1].summary = "";
+        empty[k + 1].location = new String[0];
         empty[k + 1].timeEnd = eventsFromAtoB[i].timeStart;
         empty[k].timeStart = last.timeEnd;
         empty[k].groupe = new String[1];
