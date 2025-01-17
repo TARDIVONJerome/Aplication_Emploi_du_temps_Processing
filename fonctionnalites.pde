@@ -158,16 +158,78 @@ int roomOccupation(String room, String start, String stop, int all) {
   return round((float)(used * 100) / (float)(total * ((LSTSALLES.length * all) + (-1 * all + 1))));
 }
 
-/*
-String[] emptySchedule(String entity, String start, String stop) {
-  String[] empty = new String[1];
+boolean anyIn(String obj1, String[] obj2) {
+  for (int i = 0; i<obj2.length; i++) {
+    if (obj2[i] != null && (obj1.contains(obj2[i]) || obj2[i].contains(obj1))) {
+      return true;
+    }
+  }
+  return false;
+}
+
+Event[] emptySchedule(String entity, String start, String stop) {
+  Event[] empty = new Event[1];
+  Event last = new Event();
+  boolean eod = false;
   int k = 0;
   Event[] eventsFromAtoB = delNull(getEventTime(start, stop));
   triEvent(eventsFromAtoB);
+  String head = eventsFromAtoB[0].timeStart.substring(0, 8) + "T073000Z";
   for (int i=0; i<eventsFromAtoB.length; i++) {
-    if(
+    if (anyIn(entity, eventsFromAtoB[i].teacher) || anyIn(entity, eventsFromAtoB[i].groupe)) {
+      try {
+        empty[k] = new Event();
+        if (eod) {
+          empty[k + 1] = new Event();
+        }
+      }
+      catch (ArrayIndexOutOfBoundsException e) {
+        Event[] tmp = empty;
+        empty = new Event[empty.length * 3];
+        for (int a = 0; a<tmp.length; a++) {
+          empty[a] = tmp[a];
+        }
+        tmp = null;
+        empty[k] = new Event();
+        if (eod) {
+          empty[k + 1] = new Event();
+        }
+      }
+      if (eod) {
+        empty[k + 1].timeStart = head;
+        empty[k + 1].groupe = new String[1];
+        empty[k + 1].groupe[0] = "S1G1";
+         empty[k + 1].summary = "";
+         empty[k + 1].location = new String[0];
+        empty[k + 1].timeEnd = eventsFromAtoB[i].timeStart;
+        empty[k].timeStart = last.timeEnd;
+        empty[k].groupe = new String[1];
+        empty[k].summary = "";
+        empty[k].location = new String[0];
+        empty[k].groupe[0] = "S1G1";
+        empty[k].timeEnd = last.timeEnd.substring(0, 8) + "T180000Z";
+      } else {
+        empty[k].timeStart = head;
+        empty[k].groupe = new String[1];
+        empty[k].summary = "";
+        empty[k].location = new String[0];
+        empty[k].groupe[0] = "S1G1";
+        empty[k].timeEnd = eventsFromAtoB[i].timeStart;
+      }
+      last = eventsFromAtoB[i];
+      head = eventsFromAtoB[i].timeEnd;
+      k++;
+      if (eod) {
+        k++;
+        eod = false;
+      }
+    }
+    if (!eventsFromAtoB[i].timeStart.substring(0, 8).equals(head.substring(0, 8))) {
+      eod = true;
+      head = eventsFromAtoB[i].timeStart.substring(0, 8) + "T073000Z";
+    }
   }
-
-  return empty;
+  Event[] result = new Event[k];
+  System.arraycopy(empty, 0, result, 0, k);
+  return result;
 }
-*/
