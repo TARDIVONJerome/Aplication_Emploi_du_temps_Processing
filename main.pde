@@ -1,8 +1,8 @@
-
+ //<>//
 Salle[] LSTSALLES;
 SousGroupe[] LSTSOUSGROUPES;
 String[] LSTPROFS;
-Event[] LSTEVENTS;
+Event[][] LSTEVENTS;
 
 
 boolean compTime(String time1, String time2) {
@@ -44,9 +44,15 @@ Event[] initEvents(String path) {
     } else if (tmp[0].equals("SUMMARY")) {
       toPush.summary = tmp[1];
     } else if (tmp[0].equals("LOCATION")) {
-      try{
-      toPush.location = tmp[1].split("\\\\,");
-      } catch (ArrayIndexOutOfBoundsException e){
+      try {
+        DescTmp[0] = lines[i].substring(1);
+        if(lines[i + 1].charAt(0) == ' '){
+          DescTmp[0] += lines[i + 1].substring(1);
+          i++;
+        }
+        toPush.location = DescTmp[0].split(":")[1].split("\\\\,");
+      }
+      catch (ArrayIndexOutOfBoundsException e) {
         toPush.location = new String[0];
       }
     } else if (tmp[0].equals("DESCRIPTION")) {
@@ -175,18 +181,21 @@ void setup() {
   LSTSOUSGROUPES=initSousGroupes("etudiants.csv");
   LSTPROFS=initProfs("enseignants.csv");
   String[] files={"INFO-BUT1-S1.ics", "INFO-BUT2-S3.ics", "INFO-BUT3-S5.ics", "INFO-LP-ESSIR.ics"};
-  
-  
-  Event[][] LSTEVENTS=new Event[files.length][];
+
+
+  LSTEVENTS=new Event[files.length][];
   for (int i=0; i<LSTEVENTS.length; i++) {
     LSTEVENTS[i]=delNull(initEvents(files[i]));
     triEvent(LSTEVENTS[i]);
   }
-
-
+  
+  int tt = 0; //<>//
+  for (int i=0; i<LSTSALLES.length; i++) {
+    println("Salle " + LSTSALLES[i].nom + " : " + roomOccupation(LSTSALLES[i].nom, "00000000T000000Z", "99999999T999999Z", 0) + "%");
+    tt += roomOccupation(LSTSALLES[i].nom, "00000000T000000Z", "99999999T999999Z", 1);
+  }
+  println("Utilisation tt : " + tt + "%");
 
   initDisplay();
   rectMode(CORNERS);
 }
-
-//AAAAMMDD"t"HHMMSS"z"
