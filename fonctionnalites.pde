@@ -87,29 +87,26 @@ Event[][] initExam() {
   return res;
 }
 
-int duree(Event event){
-  
-  int m1=int(event.timeStart.substring(9,11))*60+int(event.timeStart.substring(11,13));
-  int m2=int(event.timeEnd.substring(9,11))*60+int(event.timeEnd.substring(11,13));
+int duree(Event event) {
+
+  int m1=int(event.timeStart.substring(9, 11))*60+int(event.timeStart.substring(11, 13));
+  int m2=int(event.timeEnd.substring(9, 11))*60+int(event.timeEnd.substring(11, 13));
   return m2-m1;
-  
 }
 
-int chargeTravail(SousGroupe sousGroupe) {
+int chargeTravail(SousGroupe sousGroupe, String date1, String date2) {
   int cpt=0;
   for (int i=0; i<LSTEVENTS.length; i++) {
     for (int j=0; j<LSTEVENTS[i].length; j++) {
-      for(int k=0;k<LSTEVENTS[i][j].groupe.length;k++){
-        if(sousGroupe.nomSsGroupe.contains(LSTEVENTS[i][j].groupe[k])){
-          
-          cpt+=duree(LSTEVENTS[i][j]);
-          
+      if (compTime(LSTEVENTS[i][j].timeStart,date1)&& !compTime(LSTEVENTS[i][j].timeStart,date2)) {
+        for (int k=0; k<LSTEVENTS[i][j].groupe.length; k++) {
+          if (LSTEVENTS[i][j].groupe[k]!=null && sousGroupe.nomSsGroupe.contains(LSTEVENTS[i][j].groupe[k])) {
+
+            cpt+=duree(LSTEVENTS[i][j]);
+          }
         }
-        
       }
-      
     }
-    
   }
   return cpt;
 }

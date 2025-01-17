@@ -174,7 +174,7 @@ void triEvent(Event[] tab) {
 
 
 void settings() {
-  size(Displaywidth, Displayheight);
+  size(1200, 1200);
 }
 
 void setup() {
@@ -192,16 +192,16 @@ void setup() {
     triEvent(LSTEVENTS[i]);
   }
   
-  int tt = 0; //<>//
-  for (int i=0; i<LSTSALLES.length; i++) {
-    println("Salle " + LSTSALLES[i].nom + " : " + roomOccupation(LSTSALLES[i].nom, "00000000T000000Z", "99999999T999999Z", 0) + "%");
-    tt += roomOccupation(LSTSALLES[i].nom, "00000000T000000Z", "99999999T999999Z", 1);
-  }
-  println("Utilisation tt : " + tt + "%");
+  //int tt = 0; //<>//
+  //for (int i=0; i<LSTSALLES.length; i++) {
+  //  println("Salle " + LSTSALLES[i].nom + " : " + roomOccupation(LSTSALLES[i].nom, "00000000T000000Z", "99999999T999999Z", 0) + "%");
+  //  tt += roomOccupation(LSTSALLES[i].nom, "00000000T000000Z", "99999999T999999Z", 1);
+  //}
+  //println("Utilisation tt : " + tt + "%");
 
   initDisplay();
   rectMode(CORNERS);
   println(present(LSTEVENTS[0][700].timeStart.substring(0,8)));
   println(affluenceRU(LSTEVENTS[0][700].timeStart.substring(0,8)));
-  println(chargeTravail(LSTSOUSGROUPES[3]));
+  println(chargeTravail(LSTSOUSGROUPES[3],"20240000T000000Z","20260000T000000Z"));
 }
