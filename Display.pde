@@ -181,34 +181,36 @@ void créneauDessin(Event event, float x, float y, float h) {
   fill(105, 15, 88);
   rect((width-ecare)/5*x+first_ele-10, ((height-20)-(height/8+50))/(nbH-1)*(y/100-8)+(height/8+50), (width-ecare)/5*(x-1)+first_ele, ((height-20)-(height/8+50))/(nbH-1)*(y/100-8+(h-y)/100)+(height/8+50), 25);
   fill(255, 255, 255);
-  text(event.summary, (width-ecare)/5*(x-1)+((width-ecare)/5)/2+first_ele, ((height-20)-(height/8+50))/(nbH-1)*(y/100-8)+(height/8+50)+15);
-  if ( event.location.length!=0) {
-    for (int i=0; i<event.location.length; i++)text(event.location[i], (width-ecare)/5*(x-1)+((width-ecare)/5)/2+first_ele+(i%5)*60-(event.location.length-1)*30, ((height-20)-(height/8+50))/(nbH-1)*(y/100-8)+(height/8+50)+((((height-20)-(height/8+50))/(nbH-1)*(y/100-8+(h-y)/100)+(height/8+50))-(((height-20)-(height/8+50))/(nbH-1)*(y/100-8)+(height/8+50)))/2+15*(i/5));
+  if (h-y>=100)text(event.summary, (width-ecare)/5*(x-1)+((width-ecare)/5)/2+first_ele, ((height-20)-(height/8+50))/(nbH-1)*(y/100-8)+(height/8+50)+15);
+  else text(event.summary, (width-ecare)/5*(x-1)+((width-ecare)/5)/2+first_ele, ((height-20)-(height/8+50))/(nbH-1)*(y/100-8)+(height/8+50)+((((height-20)-(height/8+50))/(nbH-1)*(y/100-8+(h-y)/100)+(height/8+50))-(((height-20)-(height/8+50))/(nbH-1)*(y/100-8)+(height/8+50)))/2);
+  if ( event.location.length!=0 && h-y>=100) {
+    int TW=0;
+    //for (int i=0; i<event.location.length; i++) {
+    //  TW+=(int)textWidth(event.location[i])+10;
+    //}
+    //TW-=10;
+    //print(TW);
+    for (int k=event.location.length, i=0; i<event.location.length; i++) {
+
+      if (k>5)k=5;
+      text(event.location[i], (width-ecare)/5*(x-1)+((width-ecare)/5)/2+first_ele+(i%5)*60-(k-1)*30, ((height-20)-(height/8+50))/(nbH-1)*(y/100-8)+(height/8+50)+((((height-20)-(height/8+50))/(nbH-1)*(y/100-8+(h-y)/100)+(height/8+50))-(((height-20)-(height/8+50))/(nbH-1)*(y/100-8)+(height/8+50)))/2+20*(i/5));
+    }
   }
 }
 
 int Cweek(int annee, int mois, int jour) {
-  // Étape 1: Prendre les deux derniers chiffres de l'année
   int anneeDerniersChiffres = annee % 100;
-
-  // Étape 2: Ajouter 1/4 de ce chiffre (sans les décimales)
   int quartAnnee = anneeDerniersChiffres / 4;
-
-  // Étape 3: Ajouter le jour du mois
   int somme = anneeDerniersChiffres + quartAnnee + jour;
-
-  // Étape 4: Ajouter le mois selon la table fournie
   int moisTable[] = {0, 1, 4, 4, 0, 2, 5, 0, 3, 6, 1, 4, 6};
   somme += moisTable[mois];
 
-  // Étape 5: Si l'année est bissextile et le mois est janvier ou février, on soustrait 1
   if ((annee % 4 == 0 && annee % 100 != 0) || (annee % 400 == 0)) {
     if (mois == 1 || mois == 2) {
       somme -= 1;
     }
   }
 
-  // Étape 6: Ajouter le siècle (0 pour 1900, 6 pour 2000)
   int century = annee / 100;
   if (century == 17) {
     somme += 4;
@@ -220,17 +222,14 @@ int Cweek(int annee, int mois, int jour) {
     somme += 6;
   }
 
-  // Étape 7: Diviser la somme par 7 et garder le reste
   int jourSemaine = somme % 7;
 
-  // Réajuster pour que dimanche = 7 et lundi = 0
   if (jourSemaine == 0) {
-    jourSemaine = 7;  // Dimanche devient 7
+    jourSemaine = 7;
   } else {
-    jourSemaine -= 1;  // Décaler lundi à 0, mardi à 1, ...
+    jourSemaine -= 1;
   }
 
-  // Retourner le jour de la semaine ajusté
   return jourSemaine;
 }
 
@@ -268,68 +267,61 @@ void draw() {
 
 
 void mousePressed() {
-  String tmp = str(DDS);  // Sauvegarder l'état actuel de DDS pour détecter les changements
-  
   if (prochain.estClique(mouseX, mouseY)) {
-    DDS = addWeek(DDS);  // Ajouter 7 jours
-    DFS = addWeek(DFS);  // Ajouter 7 jours à DFS également
-    print(DDS);  // Affiche la nouvelle valeur de DDS
+    DDS = addWeek(DDS);
+    DFS = addWeek(DFS);
+    print(DDS);
   }
-  
+
   if (precedent.estClique(mouseX, mouseY)) {
-    DDS = subtractWeek(DDS);  // Soustraire 7 jours
-    DFS = subtractWeek(DFS);  // Soustraire 7 jours à DFS également
-    print(DDS);  // Affiche la nouvelle valeur de DDS
+    DDS = subtractWeek(DDS);
+    DFS = subtractWeek(DFS);
+    print(DDS);
   }
 }
 
 int addWeek(int date) {
-  // Ajouter 7 jours à une date donnée (format YYYYMMDD)
   int year = date / 10000;
   int month = (date / 100) % 100;
   int day = date % 100;
-  
-  day += 7;  // Ajouter 7 jours
-  
-  // Gestion du passage au mois suivant
+
+  day += 7;
+
   int daysInMonth = getDaysInMonth(year, month);
   if (day > daysInMonth) {
     day -= daysInMonth;
     month += 1;
-    
+
     // Gestion du passage à l'année suivante
     if (month > 12) {
       month = 1;
       year += 1;
     }
   }
-  
+
   return year * 10000 + month * 100 + day;
 }
 
 int subtractWeek(int date) {
-  // Soustraire 7 jours d'une date donnée (format YYYYMMDD)
   int year = date / 10000;
   int month = (date / 100) % 100;
   int day = date % 100;
-  
-  day -= 7;  // Soustraire 7 jours
-  
-  // Gestion du passage au mois précédent
+
+  day -= 7;
+
   if (day <= 0) {
     month -= 1;
     if (month <= 0) {
       month = 12;
       year -= 1;
     }
-    day += getDaysInMonth(year, month);  // Ajouter les jours du mois précédent
+    day += getDaysInMonth(year, month);
   }
-  
+
   return year * 10000 + month * 100 + day;
 }
 
 int getDaysInMonth(int year, int month) {
-  // Retourne le nombre de jours dans un mois donné, en tenant compte des années bissextiles
   if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
     return 31;
   } else if (month == 4 || month == 6 || month == 9 || month == 11) {
@@ -337,12 +329,9 @@ int getDaysInMonth(int year, int month) {
   } else if (month == 2) {
     return isLeapYear(year) ? 29 : 28;
   }
-  return 30;  // Valeur par défaut, ne devrait jamais arriver
+  return 30;
 }
 
 boolean isLeapYear(int year) {
-  // Vérifie si une année est bissextile
   return (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0));
 }
-
-
