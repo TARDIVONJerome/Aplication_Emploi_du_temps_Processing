@@ -158,7 +158,6 @@ int roomOccupation(String room, String start, String stop, int all) {
 boolean anyIn(String obj1, String[] obj2) {
   for (int i = 0; i<obj2.length; i++) {
     if (obj2[i] != null && (obj1.contains(obj2[i]) || obj2[i].contains(obj1))) {
-      println(obj1 + " " + obj2[i]);
       return true;
     }
   }
