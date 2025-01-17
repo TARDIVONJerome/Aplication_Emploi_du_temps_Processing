@@ -1,4 +1,5 @@
  //<>//
+ PFont myFont;
 Salle[] LSTSALLES;
 SousGroupe[] LSTSOUSGROUPES;
 String[] LSTPROFS;
@@ -177,6 +178,8 @@ void settings() {
 }
 
 void setup() {
+  myFont = createFont("Arial", 32);  // Charger la police une seule fois
+  textFont(myFont);
   LSTSALLES=initSalles("salles.csv");
   LSTSOUSGROUPES=initSousGroupes("etudiants.csv");
   LSTPROFS=initProfs("enseignants.csv");
