@@ -201,7 +201,7 @@ void setup() {
 
   initDisplay();
   rectMode(CORNERS);
-  println(present(LSTEVENTS[0][700].timeStart.substring(0,8)));
-  println(affluenceRU(LSTEVENTS[0][700].timeStart.substring(0,8)));
-  println(chargeTravail(LSTSOUSGROUPES[3],"20240000T000000Z","20260000T000000Z"));
+  //println(present(LSTEVENTS[0][700].timeStart.substring(0,8)));
+  //println(affluenceRU(LSTEVENTS[0][700].timeStart.substring(0,8)));
+  //println(chargeTravail(LSTSOUSGROUPES[3],"20240000T000000Z","20260000T000000Z"));
 }
