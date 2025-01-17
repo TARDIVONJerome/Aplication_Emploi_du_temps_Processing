@@ -92,7 +92,7 @@ void Edt() {
 
 
   heure();
-  fill(105, 15, 88);
+  
   afficheweek();
 }
 
@@ -176,9 +176,13 @@ int autre(Event event, int i, int k) {
   return parseInt(event.timeStart.substring(i, k));
 }
 
-void créneauDessin(int x, int y, int h) {
-  if (h>2000)h=1800;
+void créneauDessin(Event event,int x, int y, int h) {
+  if (h>2000)h=2000;
+  fill(105, 15, 88);
   rect((width-ecare)/5*x+first_ele-10, ((height-20)-(height/8+50))/(nbH-1)*(y/100-8)+(height/8+50), (width-ecare)/5*(x-1)+first_ele, ((height-20)-(height/8+50))/(nbH-1)*(y/100-8+(h-y)/100)+(height/8+50), 25);
+  fill(255,255,255);
+  text(event.summary, (width-ecare)/5*(x-1)+((width-ecare)/5)/2+first_ele, ((height-20)-(height/8+50))/(nbH-1)*(y/100-8)+(height/8+50)+15);
+  if( event.location.length!=0) text(event.summary, (width-ecare)/5*(x-1)+((width-ecare)/5)/2+first_ele, ((height-20)-(height/8+50))/(nbH-1)*(y/100-8)+(height/8+50)+(((height-20)-(height/8+50))/(nbH-1)*(y/100-8+(h-y)/100)+(height/8+50)+((height-20)-(height/8+50))/(nbH-1)*(y/100-8)+(height/8+50))/2);
 }
 
 int Cweek(int annee, int mois, int jour) {
@@ -234,7 +238,7 @@ void afficheweek() {
   for (int u=0; u<LSTEVENTS.length; u++) {
     for (int i=0; i<LSTEVENTS[u].length; i++) {
       if (DDS<=AMJ(LSTEVENTS[u][i]) && DFS>=AMJ(LSTEVENTS[u][i]) && contains(LSTEVENTS[u][i].groupe, selectedGroup ) || contains(LSTEVENTS[u][i].location, selectedsalle )) {
-        créneauDessin( Cweek(autre(LSTEVENTS[u][i], 0, 4), autre(LSTEVENTS[u][i], 4, 6), autre(LSTEVENTS[u][i], 6, 8)), Hm(LSTEVENTS[u][i]), HmF(LSTEVENTS[u][i]));
+        créneauDessin(LSTEVENTS[u][i], Cweek(autre(LSTEVENTS[u][i], 0, 4), autre(LSTEVENTS[u][i], 4, 6), autre(LSTEVENTS[u][i], 6, 8)), Hm(LSTEVENTS[u][i]), HmF(LSTEVENTS[u][i]));
         text("Mardi", (width-ecare)/5+((width-ecare)/5)/2+first_ele, (height/8+30));
       }
     }
@@ -252,10 +256,6 @@ boolean contains(String[] array, String str) {
 
 
 void draw() {
-  printArray(LSTEVENTS[0][503].groupe);
-  println(contains(LSTEVENTS[0][503].groupe, "S1G2.2"));
-  println(contains(LSTEVENTS[0][503].groupe, "S1G2"));
-  println(contains(LSTEVENTS[0][503].groupe, "S1"));
   background(240);
   fill(0, 180, 0);
   rect(0, 0, width, height/8);
