@@ -1,8 +1,8 @@
 import controlP5.*;
 
 
-final int Displaywidth=1500;
-final int Displayheight=1000;
+final int Displaywidth=1900;
+final int Displayheight=1050;
 
 int nbH=12;
 int first_ele=100;
@@ -92,7 +92,7 @@ void Edt() {
 
 
   heure();
-  
+
   afficheweek();
 }
 
@@ -158,7 +158,7 @@ void heure() {
 
 int Hm(Event event) {
   int decalageH=100;
-  if(20241026>AMJ(event))decalageH+=decalageH;
+  if (20241026>AMJ(event))decalageH+=decalageH;
   return parseInt(event.timeStart.substring(9, 13))+decalageH;
 }
 
@@ -167,8 +167,8 @@ int AMJ(Event event) {
 }
 
 int HmF(Event event) {
-    int decalageH=100;
-  if(20241026>AMJ(event))decalageH+=decalageH;
+  int decalageH=100;
+  if (20241026>AMJ(event))decalageH+=decalageH;
   return parseInt(event.timeEnd.substring(9, 13))+decalageH;
 }
 
@@ -176,13 +176,15 @@ int autre(Event event, int i, int k) {
   return parseInt(event.timeStart.substring(i, k));
 }
 
-void créneauDessin(Event event,int x, int y, int h) {
+void créneauDessin(Event event, float x, float y, float h) {
   if (h>2000)h=2000;
   fill(105, 15, 88);
   rect((width-ecare)/5*x+first_ele-10, ((height-20)-(height/8+50))/(nbH-1)*(y/100-8)+(height/8+50), (width-ecare)/5*(x-1)+first_ele, ((height-20)-(height/8+50))/(nbH-1)*(y/100-8+(h-y)/100)+(height/8+50), 25);
-  fill(255,255,255);
+  fill(255, 255, 255);
   text(event.summary, (width-ecare)/5*(x-1)+((width-ecare)/5)/2+first_ele, ((height-20)-(height/8+50))/(nbH-1)*(y/100-8)+(height/8+50)+15);
-  if( event.location.length!=0) text(event.summary, (width-ecare)/5*(x-1)+((width-ecare)/5)/2+first_ele, ((height-20)-(height/8+50))/(nbH-1)*(y/100-8)+(height/8+50)+(((height-20)-(height/8+50))/(nbH-1)*(y/100-8+(h-y)/100)+(height/8+50)+((height-20)-(height/8+50))/(nbH-1)*(y/100-8)+(height/8+50))/2);
+  if ( event.location.length!=0) {
+    for (int i=0; i<event.location.length; i++)text(event.location[i], (width-ecare)/5*(x-1)+((width-ecare)/5)/2+first_ele+(i%5)*60-(event.location.length-1)*30, ((height-20)-(height/8+50))/(nbH-1)*(y/100-8)+(height/8+50)+((((height-20)-(height/8+50))/(nbH-1)*(y/100-8+(h-y)/100)+(height/8+50))-(((height-20)-(height/8+50))/(nbH-1)*(y/100-8)+(height/8+50)))/2+15*(i/5));
+  }
 }
 
 int Cweek(int annee, int mois, int jour) {
@@ -236,10 +238,9 @@ int Cweek(int annee, int mois, int jour) {
 
 void afficheweek() {
   for (int u=0; u<LSTEVENTS.length; u++) {
-    for (int i=0; i<LSTEVENTS[u].length; i++) {
+    for (int i=LSTEVENTS[u].length-1; i>0; i--) {
       if (DDS<=AMJ(LSTEVENTS[u][i]) && DFS>=AMJ(LSTEVENTS[u][i]) && contains(LSTEVENTS[u][i].groupe, selectedGroup ) || contains(LSTEVENTS[u][i].location, selectedsalle )) {
         créneauDessin(LSTEVENTS[u][i], Cweek(autre(LSTEVENTS[u][i], 0, 4), autre(LSTEVENTS[u][i], 4, 6), autre(LSTEVENTS[u][i], 6, 8)), Hm(LSTEVENTS[u][i]), HmF(LSTEVENTS[u][i]));
-        text("Mardi", (width-ecare)/5+((width-ecare)/5)/2+first_ele, (height/8+30));
       }
     }
   }
@@ -247,7 +248,7 @@ void afficheweek() {
 
 boolean contains(String[] array, String str) {
   for (int i = 0; i < array.length; i++) {
-    if (array[i]!=null && str!=null && str.contains(array[i])) {
+    if (array[i]!=null && str!=null && (str.contains(array[i]) || (array[i].equals("Mobile") && (str.equals("Mob.1")|| str.equals("Mob.2"))))) {
       return true;
     }
   }
@@ -262,3 +263,86 @@ void draw() {
   textSize(18);
   Edt();
 }
+
+
+
+
+void mousePressed() {
+  String tmp = str(DDS);  // Sauvegarder l'état actuel de DDS pour détecter les changements
+  
+  if (prochain.estClique(mouseX, mouseY)) {
+    DDS = addWeek(DDS);  // Ajouter 7 jours
+    DFS = addWeek(DFS);  // Ajouter 7 jours à DFS également
+    print(DDS);  // Affiche la nouvelle valeur de DDS
+  }
+  
+  if (precedent.estClique(mouseX, mouseY)) {
+    DDS = subtractWeek(DDS);  // Soustraire 7 jours
+    DFS = subtractWeek(DFS);  // Soustraire 7 jours à DFS également
+    print(DDS);  // Affiche la nouvelle valeur de DDS
+  }
+}
+
+int addWeek(int date) {
+  // Ajouter 7 jours à une date donnée (format YYYYMMDD)
+  int year = date / 10000;
+  int month = (date / 100) % 100;
+  int day = date % 100;
+  
+  day += 7;  // Ajouter 7 jours
+  
+  // Gestion du passage au mois suivant
+  int daysInMonth = getDaysInMonth(year, month);
+  if (day > daysInMonth) {
+    day -= daysInMonth;
+    month += 1;
+    
+    // Gestion du passage à l'année suivante
+    if (month > 12) {
+      month = 1;
+      year += 1;
+    }
+  }
+  
+  return year * 10000 + month * 100 + day;
+}
+
+int subtractWeek(int date) {
+  // Soustraire 7 jours d'une date donnée (format YYYYMMDD)
+  int year = date / 10000;
+  int month = (date / 100) % 100;
+  int day = date % 100;
+  
+  day -= 7;  // Soustraire 7 jours
+  
+  // Gestion du passage au mois précédent
+  if (day <= 0) {
+    month -= 1;
+    if (month <= 0) {
+      month = 12;
+      year -= 1;
+    }
+    day += getDaysInMonth(year, month);  // Ajouter les jours du mois précédent
+  }
+  
+  return year * 10000 + month * 100 + day;
+}
+
+int getDaysInMonth(int year, int month) {
+  // Retourne le nombre de jours dans un mois donné, en tenant compte des années bissextiles
+  if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
+    return 31;
+  } else if (month == 4 || month == 6 || month == 9 || month == 11) {
+    return 30;
+  } else if (month == 2) {
+    return isLeapYear(year) ? 29 : 28;
+  }
+  return 30;  // Valeur par défaut, ne devrait jamais arriver
+}
+
+boolean isLeapYear(int year) {
+  // Vérifie si une année est bissextile
+  return (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0));
+}
+
+
