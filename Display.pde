@@ -75,7 +75,7 @@ class Edt extends Window {
   int nbH = 12;
   int Cday;
   int hourSize;
-  
+
   Edt(int x, int y, int sx, int sy) {
     super(x, y, sx, sy);
 
@@ -124,13 +124,13 @@ class Edt extends Window {
       text(JSemaine[i], daySize*i+Cday+first_J, y+margeJS/2+margeH);
     }
     rectMode(CORNER);
-   textAlign(RIGHT, CENTER);
+    textAlign(RIGHT, CENTER);
     fill(0);
     for (int i=0; i<nbH; i++) {
       if (i!=nbH-1) {
         text(8+i+":00", first_J-3, hourSize*i+y+margeH+margeJS);
         for (int y=1; y<51; y++) {
-          if (y%2==1)line((Edtwidth-first_J)/50*y+first_J-15, hourSize*i+this.y+margeH+margeJS, (Edtwidth-first_J)/50*(y+1)+first_J-15,  hourSize*i+this.y+margeH+margeJS);
+          if (y%2==1)line((Edtwidth-first_J)/50*y+first_J-15, hourSize*i+this.y+margeH+margeJS, (Edtwidth-first_J)/50*(y+1)+first_J-15, hourSize*i+this.y+margeH+margeJS);
         }
       } else text(">"+(8+i)+":00", first_J-3, hourSize*i+y+margeH+margeJS);
     }
@@ -140,7 +140,7 @@ class Edt extends Window {
   void displayweek() {
     for (int u=0; u<LSTEVENTS.length; u++) {
       for (int i=LSTEVENTS[u].length-1; i>0; i--) {
-        if (DDS<=AMJ(LSTEVENTS[u][i]) && DFS>=AMJ(LSTEVENTS[u][i]) && (contains(LSTEVENTS[u][i].groupe, SGROUPE ) || contains(LSTEVENTS[u][i].location, SROOM ))) {
+        if (DDS<=AMJ(LSTEVENTS[u][i]) && DFS>AMJ(LSTEVENTS[u][i]) && (contains(LSTEVENTS[u][i].groupe, SGROUPE ) || contains(LSTEVENTS[u][i].location, SROOM ))) {
           displayhoraire(LSTEVENTS[u][i], Cweek(autre(LSTEVENTS[u][i], 0, 4), autre(LSTEVENTS[u][i], 4, 6), autre(LSTEVENTS[u][i], 6, 8)), Hm(LSTEVENTS[u][i]), HmF(LSTEVENTS[u][i]));
         }
       }
@@ -149,38 +149,47 @@ class Edt extends Window {
   }
 
   void displayhoraire(Event event, float jour, float debut, float fin) {
+    textAlign(CENTER, CENTER);
     float dbut=(hourSize*(debut-800)/100)+(y+margeH+margeJS);
     float fn=(hourSize*(fin-800)/100)+(y+margeH+margeJS);
+    float Height=fn-dbut;
     rectMode(CORNERS);
-    if (fin>2000) {
-      fin=2000; // 20:00
+    if (fin>1900) {
+      fn=(hourSize*(1900-800)/100)+(y+margeH+margeJS);
     }
 
     fill(105, 15, 88);
-
-
     rect(daySize * jour + first_J, dbut, this.daySize * (jour + 1) + first_J - 10, fn, 20);
     fill(255, 255, 255);
-    if (fin-debut>=100)text(event.summary, ((this.x + this.sx)-ecare)/5*(x-1)+(((this.x + this.sx)-ecare)/5)/2+first_ele, (((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*(y/100-8)+((this.y + this.sy)/8+50)+15);
-    //else text(event.summary, ((this.x + this.sx)-ecare)/5*(x-1)+(((this.x + this.sx)-ecare)/5)/2+first_ele, (((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*(y/100-8)+((this.y + this.sy)/8+50)+(((((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*(y/100-8+(h-y)/100)+((this.y + this.sy)/8+50))-((((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*(y/100-8)+((this.y + this.sy)/8+50)))/2);
-    //if ( event.location.length!=0 && h-y>=100) {
-    //  int TW=0;
-    //for (int i=0; i<event.location.length; i++) {
-    //  TW+=(int)textWidth(event.location[i])+10;
-    //}
-    //TW-=10;
-    //print(TW);
-    //for (int k=event.location.length, i=0; i<event.location.length; i++) {
+    int k=0;
+    for (int l=0; l<Height/15; l++) {
+      int TxtW=0;
 
-    //  if (k>5)k=5;
-    //  text(event.location[i], ((this.x + this.sx)-ecare)/5*(x-1)+(((this.x + this.sx)-ecare)/5)/2+first_ele+(i%5)*60-(k-1)*30, (((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*(y/100-8)+((this.y + this.sy)/8+50)+(((((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*(y/100-8+(h-y)/100)+((this.y + this.sy)/8+50))-((((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*(y/100-8)+((this.y + this.sy)/8+50)))/2+20*(i/5));
-    //}
+      if (textWidth(event.summary)+15>daySize)event.summary=event.summary.substring(0, 20)+"...";
+      if (l==0) {
+        if (Height>50)text(event.summary, daySize * jour + first_J +Cday, dbut+13);
+        else text(event.summary, daySize * jour + first_J +Cday, dbut+Height/2);
+      }
+      //else text(event.summary, ((this.x + this.sx)-ecare)/5*(x-1)+(((this.x + this.sx)-ecare)/5)/2+first_ele, (((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*(y/100-8)+((this.y + this.sy)/8+50)+(((((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*(y/100-8+(h-y)/100)+((this.y + this.sy)/8+50))-((((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*(y/100-8)+((this.y + this.sy)/8+50)))/2);
+      if ( event.location.length!=0 && Height>=100) {
+        for (int i=0; i<event.location.length; i++) {
+          TxtW+=(int)textWidth(event.location[i])+10;
+        }
+        TxtW-=10;
+        for ( int i=0; i<event.location.length; i++) {
+          if (k>5)k=5;
+          text(event.location[i],i*30+daySize * jour + first_J +Cday-k*60 ,dbut+Height/2);
+        }
+      }
+    }
     rectMode(CORNER);
+    textAlign(LEFT, LEFT);
   }
 
   void display() {
     displayEDT();
     displayweek();
+    displayboutons();
   }
 }
 
