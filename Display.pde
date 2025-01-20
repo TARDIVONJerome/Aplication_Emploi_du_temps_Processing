@@ -65,8 +65,17 @@ class Edt extends Window {
   Bouton prochain;
   Bouton precedent;
   int marge = 40;
+  int margeH = 20;
+  int margeJS =50 ;
+  int first_J = 90;
+  int Edtwidth = (int)(this.x + this.sx)-marge;
+  int Edtheight = (int)(this.y + this.sy);
+  int Nbdays = 7;
   int daySize;
-
+  int nbH = 12;
+  int Cday;
+  int hourSize;
+  
   Edt(int x, int y, int sx, int sy) {
     super(x, y, sx, sy);
 
@@ -74,11 +83,13 @@ class Edt extends Window {
     precedent = new Bouton(30, 30, 30, 30, "flèche2.png");
     prochain.actif=true;
     precedent.actif=true;
-    daySize = (sy - (marge * 2) - y) / 7;
+    daySize = (Edtwidth-first_J) / 7;
+    Cday=(daySize-10)/2;
+    hourSize=(int)((Edtheight-margeH)-(y+margeH+margeJS))/(nbH-1);
   }
 
   void displayboutons() {
-    prochain.x=(int)(this.x + this.sx)-40;
+    prochain.x=(int)(this.x + this.sx)-marge;
     prochain.y=(int)(this.y + this.sy)/2;
     prochain.display();
 
@@ -100,6 +111,32 @@ class Edt extends Window {
    }
    }
    */
+  void displayEDT() {
+
+
+    stroke(0);
+    rectMode(CORNERS);
+    textAlign(CENTER, CENTER);
+    for (int i=0; i<Nbdays; i++) {
+      fill(255);
+      rect(daySize*i+first_J, y+margeH, daySize*(i+1)+first_J-10, Edtheight-margeH);
+      fill(0);
+      text(JSemaine[i], daySize*i+Cday+first_J, y+margeJS/2+margeH);
+    }
+    rectMode(CORNER);
+   textAlign(RIGHT, CENTER);
+    fill(0);
+    for (int i=0; i<nbH; i++) {
+      if (i!=nbH-1) {
+        text(8+i+":00", first_J-3, hourSize*i+y+margeH+margeJS);
+        for (int y=1; y<51; y++) {
+          if (y%2==1)line((Edtwidth-first_J)/50*y+first_J-15, hourSize*i+this.y+margeH+margeJS, (Edtwidth-first_J)/50*(y+1)+first_J-15,  hourSize*i+this.y+margeH+margeJS);
+        }
+      } else text(">"+(8+i)+":00", first_J-3, hourSize*i+y+margeH+margeJS);
+    }
+  }
+
+
   void displayweek() {
     for (int u=0; u<LSTEVENTS.length; u++) {
       for (int i=LSTEVENTS[u].length-1; i>0; i--) {
@@ -108,18 +145,23 @@ class Edt extends Window {
         }
       }
     }
+    textAlign(LEFT, LEFT);
   }
 
   void displayhoraire(Event event, float jour, float debut, float fin) {
+    float dbut=(hourSize*(debut-800)/100)+(y+margeH+margeJS);
+    float fn=(hourSize*(fin-800)/100)+(y+margeH+margeJS);
+    rectMode(CORNERS);
     if (fin>2000) {
       fin=2000; // 20:00
     }
 
     fill(105, 15, 88);
 
-    rect(this.daySize * jour + this.marge, this.y + 10, this.daySize * (jour + 1) + marge, this.y + 20);
+
+    rect(daySize * jour + first_J, dbut, this.daySize * (jour + 1) + first_J - 10, fn, 20);
     fill(255, 255, 255);
-    //if (h-y>=100)text(event.summary, ((this.x + this.sx)-ecare)/5*(x-1)+(((this.x + this.sx)-ecare)/5)/2+first_ele, (((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*(y/100-8)+((this.y + this.sy)/8+50)+15);
+    if (fin-debut>=100)text(event.summary, ((this.x + this.sx)-ecare)/5*(x-1)+(((this.x + this.sx)-ecare)/5)/2+first_ele, (((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*(y/100-8)+((this.y + this.sy)/8+50)+15);
     //else text(event.summary, ((this.x + this.sx)-ecare)/5*(x-1)+(((this.x + this.sx)-ecare)/5)/2+first_ele, (((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*(y/100-8)+((this.y + this.sy)/8+50)+(((((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*(y/100-8+(h-y)/100)+((this.y + this.sy)/8+50))-((((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*(y/100-8)+((this.y + this.sy)/8+50)))/2);
     //if ( event.location.length!=0 && h-y>=100) {
     //  int TW=0;
@@ -133,113 +175,12 @@ class Edt extends Window {
     //  if (k>5)k=5;
     //  text(event.location[i], ((this.x + this.sx)-ecare)/5*(x-1)+(((this.x + this.sx)-ecare)/5)/2+first_ele+(i%5)*60-(k-1)*30, (((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*(y/100-8)+((this.y + this.sy)/8+50)+(((((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*(y/100-8+(h-y)/100)+((this.y + this.sy)/8+50))-((((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*(y/100-8)+((this.y + this.sy)/8+50)))/2+20*(i/5));
     //}
+    rectMode(CORNER);
   }
 
   void display() {
-
-
-    fill(255);
-    stroke(0);
-    /*
-    rect(first_ele, (this.y + this.sy)/8+10, ((this.x + this.sx)-ecare)/5+first_ele-10, (this.y + this.sy)-20);
-     rect(((this.x + this.sx)-ecare)/5+first_ele, (this.y + this.sy)/8+10, ((this.x + this.sx)-ecare)/5*2+first_ele-10, (this.y + this.sy)-20);
-     rect(((this.x + this.sx)-ecare)/5*2+first_ele, (this.y + this.sy)/8+10, ((this.x + this.sx)-ecare)/5*3+first_ele-10, (this.y + this.sy)-20);
-     rect(((this.x + this.sx)-ecare)/5*3+first_ele, (this.y + this.sy)/8+10, ((this.x + this.sx)-ecare)/5*4+first_ele-10, (this.y + this.sy)-20);
-     rect(((this.x + this.sx)-ecare)/5*4+first_ele, (this.y + this.sy)/8+10, ((this.x + this.sx)-ecare)+first_ele-10, (this.y + this.sy)-20);
-     
-     displayboutons();
-     
-     
-     textAlign(CENTER, CENTER);
-     fill(0);
-     text("Lundi", (((this.x + this.sx)-ecare)/5)/2+first_ele, ((this.y + this.sy)/8+30));
-     text("Mardi", ((this.x + this.sx)-ecare)/5+(((this.x + this.sx)-ecare)/5)/2+first_ele, ((this.y + this.sy)/8+30));
-     text("Mercredi", ((this.x + this.sx)-ecare)/5*2+(((this.x + this.sx)-ecare)/5)/2+first_ele, ((this.y + this.sy)/8+30));
-     text("Jeudi", ((this.x + this.sx)-ecare)/5*3+(((this.x + this.sx)-ecare)/5)/2+first_ele, ((this.y + this.sy)/8+30));
-     text("Vendredi", ((this.x + this.sx)-ecare)/5*4+(((this.x + this.sx)-ecare)/5)/2+first_ele, ((this.y + this.sy)/8+30));
-     textAlign(BASELINE);
-     */
-
-    //displayheure();
+    displayEDT();
     displayweek();
-  }
-}
-
-class Controls extends Window {
-  DropdownMenu groupDropdown;
-  DropdownMenu salleDropdown;
-  DropdownMenu statDropdown;
-
-  Controls(int x, int y, int sx, int sy) {
-    super(x, y, sx, sy);
-    groupDropdown = new DropdownMenu((int)x + 10,
-      (int)y + 10,
-      (int)(x + sx)/10,
-      (int)(y + sy)/2,
-      "Select Group",
-      addGroups(LSTSOUSGROUPES));
-
-    salleDropdown = new DropdownMenu((int)x + (x + sx)/5 + 10 * 2,
-      (int)y + 10,
-      (int)(x + sx)/10,
-      (int)(y + sy)/2,
-      "Select salle",
-      addSalles(LSTSALLES));
-
-    statDropdown = new DropdownMenu((int)x + ((x + sx)/5) * 2 + 10 * 3,
-      (int)y + 10,
-      (int)(x + sx)/10,
-      (int)(y + sy)/2,
-      "Select Stats",
-      addStats(new String[]{"edt", "graph"}));
-  }
-
-  void clicked(int ex, int ey) {
-    if (groupDropdown.estClique(ex, ey)) {
-      SGROUPE = groupDropdown.selected;
-      SROOM = "";
-    }
-    if (salleDropdown.estClique(ex, ey)) {
-      SROOM = salleDropdown.selected;
-      SGROUPE = "";
-    }
-    if (statDropdown.estClique(ex, ey)) {
-      SSTATS = statDropdown.selected;
-      SGROUPE = "";
-      SROOM = "";
-    }
-  }
-
-  String[] addGroups(SousGroupe[] groups) {
-    String[] items = new String[groups.length];
-    for (int i = 0; i < groups.length; i++) {
-      items[i] = groups[i].nomSsGroupe;
-    }
-    return items;
-  }
-
-  String[] addSalles(Salle[] salles) {
-    String[] items = new String[salles.length];
-    for (int i = 0; i < salles.length; i++) {
-      items[i] = salles[i].nom;
-    }
-    return items;
-  }
-
-  String[] addStats(String[] Stats) {
-    String[] items = new String[Stats.length];
-    for (int i = 0; i < Stats.length; i++) {
-      items[i] = Stats[i];
-    }
-    return items;
-  }
-
-  void display() {
-    fill(125);
-    rect(x, y, sx, sy);
-    groupDropdown.display();
-    salleDropdown.display();
-    statDropdown.display();
   }
 }
 
