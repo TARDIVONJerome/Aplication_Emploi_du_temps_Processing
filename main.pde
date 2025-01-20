@@ -23,7 +23,7 @@ int annee = year();
 int mois = month();
 int jour = day();
 int DDS =annee*10000+mois*100+jour-Cweek(annee, mois, jour);
-int DFS =DDS+7;
+int DFS =DDS+6;
 
 boolean compTime(String time1, String time2) {
   time1 = time1.substring(0, 15);
