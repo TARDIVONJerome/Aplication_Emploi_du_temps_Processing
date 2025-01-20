@@ -1,4 +1,4 @@
-int present(String date) { //<>// //<>// //<>//
+int present(String date) { //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
   int cpt=0;
   SousGroupe[] tab=new SousGroupe[LSTSOUSGROUPES.length];
   arrayCopy(LSTSOUSGROUPES, tab);
@@ -252,15 +252,45 @@ Event[][] crenauxCommuns(SousGroupe[] tab) {
       for (int l=0; l<tab.length; l++) {
         for (int k=0; k<LSTEVENTS[i][j].groupe.length; k++) {
           if (LSTEVENTS[i][j].groupe[k]!=null && tab[l].nomSsGroupe.contains(LSTEVENTS[i][j].groupe[k])) {
-            tmp[l][j]=LSTEVENTS[i][j];
+            if (tmp[l][j]==null) tmp[l][j]=LSTEVENTS[i][j];
+            else for (int b=0; b<tmp[l].length; b++) {
+              if (tmp[l][b]==null) {
+                tmp[l][b]=LSTEVENTS[i][j];
+                break;
+              }
+            }
           } else if (LSTEVENTS[i][j].groupe[k]!=null && tab[l].nomSsGroupe.equals("Mob.1") &&( LSTEVENTS[i][j].groupe[k].equals("Mob.1")|| LSTEVENTS[i][j].groupe[k].equals("Mobile")||LSTEVENTS[i][j].groupe[k].equals("BUT3"))) {
-            tmp[l][j]=LSTEVENTS[i][j];
+            if (tmp[l][j]==null) tmp[l][j]=LSTEVENTS[i][j];
+            else for (int b=0; b<tmp[l].length; b++) {
+              if (tmp[l][b]==null) {
+                tmp[l][b]=LSTEVENTS[i][j];
+                break;
+              }
+            }
           } else if (LSTEVENTS[i][j].groupe[k]!=null && tab[l].nomSsGroupe.equals("Mob.2") &&( LSTEVENTS[i][j].groupe[k].equals("Mob.2")|| LSTEVENTS[i][j].groupe[k].equals("Mobile")||LSTEVENTS[i][j].groupe[k].equals("BUT3"))) {
-            tmp[l][j]=LSTEVENTS[i][j];
+            if (tmp[l][j]==null) tmp[l][j]=LSTEVENTS[i][j];
+            else for (int b=0; b<tmp[l].length; b++) {
+              if (tmp[l][b]==null) {
+                tmp[l][b]=LSTEVENTS[i][j];
+                break;
+              }
+            }
           } else if (LSTEVENTS[i][j].groupe[k]!=null && tab[l].nomSsGroupe.equals("Web.1") &&( LSTEVENTS[i][j].groupe[k].equals("Web.1")|| LSTEVENTS[i][j].groupe[k].equals("Web")||LSTEVENTS[i][j].groupe[k].equals("BUT3"))) {
-            tmp[l][j]=LSTEVENTS[i][j];
+            if (tmp[l][j]==null) tmp[l][j]=LSTEVENTS[i][j];
+            else for (int b=0; b<tmp[l].length; b++) {
+              if (tmp[l][b]==null) {
+                tmp[l][b]=LSTEVENTS[i][j];
+                break;
+              }
+            }
           } else if (LSTEVENTS[i][j].groupe[k]!=null && tab[l].nomSsGroupe.equals("Web.2") &&( LSTEVENTS[i][j].groupe[k].equals("Web.2")|| LSTEVENTS[i][j].groupe[k].equals("Web")||LSTEVENTS[i][j].groupe[k].equals("BUT3"))) {
-            tmp[l][j]=LSTEVENTS[i][j];
+            if (tmp[l][j]==null) tmp[l][j]=LSTEVENTS[i][j];
+            else for (int b=0; b<tmp[l].length; b++) {
+              if (tmp[l][b]==null) {
+                tmp[l][b]=LSTEVENTS[i][j];
+                break;
+              }
+            }
           }
         }
       }
@@ -271,41 +301,77 @@ Event[][] crenauxCommuns(SousGroupe[] tab) {
     tmp[i]=delNull(tmp[i]);
     triEvent(tmp[i]);
     for (int j=0; j<tmp[i].length-1; j++) {
-      if (tmp[i][j].timeEnd.substring(0, 8).equals(tmp[i][j+1].timeStart.substring(0, 8))) {
-        tmp2[i][j]=new Event();
-        tmp2[i][j].timeStart=tmp[i][j].timeEnd;
-        tmp2[i][j].timeEnd=tmp[i][j+1].timeStart;
-        tmp2[i][j].summary="Créneau vide commun";
-        tmp2[i][j].location= new String[0];
-        tmp2[i][j].groupe=new String[tab.length];
-        for (int a=0; a<tab.length; a++) tmp2[i][j].groupe[a]=tab[a].nomSsGroupe;
-        tmp2[i][j].teacher= new String[0];
-      } 
-      else if (compTime(tmp[i][j+1].timeStart, tmp[i][j+1].timeStart.substring(0, 8)+"T083000Z")) {
-        tmp2[i][j]=new Event();
-        tmp2[i][j].timeStart=tmp[i][j+1].timeStart.substring(0, 8)+"T083000Z";
-        tmp2[i][j].timeStart=tmp[i][j+1].timeStart;
-        tmp2[i][j].summary="Créneau vide commun";
-        tmp2[i][j].location= new String[0];
-        tmp2[i][j].groupe=new String[tab.length];
-        for (int a=0; a<tab.length; a++) tmp2[i][j].groupe[a]=tab[a].nomSsGroupe;
-        tmp2[i][j].teacher= new String[0];
-      }
+      if (!tmp[i][j].timeEnd.equals(tmp[i][j+1].timeStart) && !tmp[i][j].timeEnd.equals(tmp[i][j+1].timeEnd) && !tmp[i][j].timeStart.equals(tmp[i][j+1].timeStart)) {
+        if (tmp[i][j].timeEnd.substring(0, 8).equals(tmp[i][j+1].timeStart.substring(0, 8))) {
+          tmp2[i][j]=new Event();
+          tmp2[i][j].timeStart=tmp[i][j].timeEnd;
+          tmp2[i][j].timeEnd=tmp[i][j+1].timeStart;
+          tmp2[i][j].summary="Créneau vide commun";
+          tmp2[i][j].location= new String[0];
+          tmp2[i][j].groupe=new String[tab.length];
+          for (int a=0; a<tab.length; a++) tmp2[i][j].groupe[a]=tab[a].nomSsGroupe;
+          tmp2[i][j].teacher= new String[0];
+        } else {
+          if (compTime(tmp[i][j+1].timeStart, tmp[i][j+1].timeStart.substring(0, 8)+"T083000Z")) {
+            tmp2[i][j]=new Event();
+            tmp2[i][j].timeStart=tmp[i][j+1].timeStart.substring(0, 8)+"T083000Z";
+            tmp2[i][j].timeEnd=tmp[i][j+1].timeStart;
+            tmp2[i][j].summary="Créneau vide commun";
+            tmp2[i][j].location= new String[0];
+            tmp2[i][j].groupe=new String[tab.length];
+            for (int a=0; a<tab.length; a++) tmp2[i][j].groupe[a]=tab[a].nomSsGroupe;
+            tmp2[i][j].teacher= new String[0];
+          }
 
-      if (compTime(tmp[i][j].timeEnd.substring(0, 8)+"T174500Z", tmp[i][j].timeEnd)) {
-        tmp2[i][j]=new Event();
-        tmp2[i][j].timeStart=tmp[i][j].timeEnd;
-        tmp2[i][j].timeEnd=tmp[i][j].timeEnd.substring(0, 8)+"T174500Z";
-        tmp2[i][j].summary="Créneau vide commun";
-        tmp2[i][j].location= new String[0];
-        tmp2[i][j].groupe=new String[tab.length];
-        for (int a=0; a<tab.length; a++) tmp2[i][j].groupe[a]=tab[a].nomSsGroupe;
-        tmp2[i][j].teacher= new String[0];
+          if (compTime(tmp[i][j].timeEnd.substring(0, 8)+"T174500Z", tmp[i][j].timeEnd)) {
+            tmp2[i][j]=new Event();
+            tmp2[i][j].timeStart=tmp[i][j].timeEnd;
+            tmp2[i][j].timeEnd=tmp[i][j].timeEnd.substring(0, 8)+"T174500Z";
+            tmp2[i][j].summary="Créneau vide commun";
+            tmp2[i][j].location= new String[0];
+            tmp2[i][j].groupe=new String[tab.length];
+            for (int a=0; a<tab.length; a++) tmp2[i][j].groupe[a]=tab[a].nomSsGroupe;
+            tmp2[i][j].teacher= new String[0];
+          }
+        }
       }
     }
   }
 
+  for (int i=0; i<tmp2.length; i++) {
+    tmp2[i]=delNull(tmp2[i]);
+    triEvent(tmp2[i]);
+  }
 
-
+  for (int i=1; i<tmp.length; i++) {
+    Event[]tmp3=new Event[tmp2[0].length];
+    for (int k=0; k<tmp2[0].length; k++) {
+      for (int j=0; j<tmp2[i].length; j++) {
+        if (tmp2[i][j].timeStart.substring(0,8).equals(tmp2[0][k].timeStart.substring(0,8))) {
+          if(tmp2[i][j].timeStart.equals(tmp2[0][k].timeStart) && tmp2[i][j].timeEnd.equals(tmp2[0][k].timeEnd)){
+          tmp3[k]=tmp2[i][j];
+          }
+          else if(tmp2[i][j].timeStart.equals(tmp2[0][k].timeStart)){
+            if(compTime(tmp2[i][j].timeEnd,tmp2[0][k].timeEnd)){
+            tmp3[k]=tmp2[0][k];
+            }
+            else {
+              tmp3[k]=tmp2[i][j];
+            }
+          }
+          else if(tmp2[i][j].timeEnd.equals(tmp2[0][k].timeEnd)){
+            if(compTime(tmp2[i][j].timeStart,tmp2[0][k].timeStart)){
+            tmp3[k]=tmp2[i][j];
+            }
+            else {
+              tmp3[k]=tmp2[0][k];
+            }
+          }
+        }
+      }
+    }
+    tmp2[0]=delNull(tmp3);
+  }
+  res[0]=tmp2[0];
   return res;
 }
