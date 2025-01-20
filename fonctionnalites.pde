@@ -1,5 +1,5 @@
-int present(String date) { //<>// //<>//
-  int cpt=0; //<>//
+int present(String date) { //<>// //<>// //<>//
+  int cpt=0;
   SousGroupe[] tab=new SousGroupe[LSTSOUSGROUPES.length];
   arrayCopy(LSTSOUSGROUPES, tab);
   for (int i=0; i<LSTEVENTS.length; i++) {
@@ -98,10 +98,18 @@ int chargeTravail(SousGroupe sousGroupe, String date1, String date2) {
   int cpt=0;
   for (int i=0; i<LSTEVENTS.length; i++) {
     for (int j=0; j<LSTEVENTS[i].length; j++) {
-      if (compTime(LSTEVENTS[i][j].timeStart,date1)&& !compTime(LSTEVENTS[i][j].timeStart,date2)) {
+      if (compTime(LSTEVENTS[i][j].timeStart, date1)&& !compTime(LSTEVENTS[i][j].timeStart, date2)) {
         for (int k=0; k<LSTEVENTS[i][j].groupe.length; k++) {
           if (LSTEVENTS[i][j].groupe[k]!=null && sousGroupe.nomSsGroupe.contains(LSTEVENTS[i][j].groupe[k])) {
 
+            cpt+=duree(LSTEVENTS[i][j]);
+          } else if (LSTEVENTS[i][j].groupe[k]!=null && sousGroupe.nomSsGroupe.equals("Mob.1") &&( LSTEVENTS[i][j].groupe[k].equals("Mob.1")|| LSTEVENTS[i][j].groupe[k].equals("Mobile")||LSTEVENTS[i][j].groupe[k].equals("BUT3"))) {
+            cpt+=duree(LSTEVENTS[i][j]);
+          } else if (LSTEVENTS[i][j].groupe[k]!=null && sousGroupe.nomSsGroupe.equals("Mob.2") &&( LSTEVENTS[i][j].groupe[k].equals("Mob.2")|| LSTEVENTS[i][j].groupe[k].equals("Mobile")||LSTEVENTS[i][j].groupe[k].equals("BUT3"))) {
+            cpt+=duree(LSTEVENTS[i][j]);
+          } else if (LSTEVENTS[i][j].groupe[k]!=null && sousGroupe.nomSsGroupe.equals("Web.1") &&( LSTEVENTS[i][j].groupe[k].equals("Web.1")|| LSTEVENTS[i][j].groupe[k].equals("Web")||LSTEVENTS[i][j].groupe[k].equals("BUT3"))) {
+            cpt+=duree(LSTEVENTS[i][j]);
+          } else if (LSTEVENTS[i][j].groupe[k]!=null && sousGroupe.nomSsGroupe.equals("Web.2") &&( LSTEVENTS[i][j].groupe[k].equals("Web.2")|| LSTEVENTS[i][j].groupe[k].equals("Web")||LSTEVENTS[i][j].groupe[k].equals("BUT3"))) {
             cpt+=duree(LSTEVENTS[i][j]);
           }
         }
@@ -112,7 +120,7 @@ int chargeTravail(SousGroupe sousGroupe, String date1, String date2) {
 }
 
 
-Event[] getEventTime(String start, String stop) { //<>//
+Event[] getEventTime(String start, String stop) {
   Event[] res = new Event[1];
   int k = 0;
   for (int i=0; i<LSTEVENTS.length; i++) {
@@ -164,69 +172,140 @@ boolean anyIn(String obj1, String[] obj2) {
   return false;
 }
 
-Event[] emptySchedule(String entity, String start, String stop) {
-  Event[] empty = new Event[1];
-  Event last = new Event();
-  boolean eod = false;
-  int k = 0;
-  Event[] eventsFromAtoB = delNull(getEventTime(start, stop));
-  triEvent(eventsFromAtoB);
-  String head = eventsFromAtoB[0].timeStart.substring(0, 8) + "T073000Z";
-  for (int i=0; i<eventsFromAtoB.length; i++) {
-    if (anyIn(entity, eventsFromAtoB[i].teacher) || anyIn(entity, eventsFromAtoB[i].groupe)) {
-      try {
-        empty[k] = new Event();
-        if (eod) {
-          empty[k + 1] = new Event();
+//Event[] emptySchedule(String entity, String start, String stop) {
+//  Event[] empty = new Event[1];
+//  Event last = new Event();
+//  boolean eod = false;
+//  int k = 0;
+//  Event[] eventsFromAtoB = delNull(getEventTime(start, stop));
+//  triEvent(eventsFromAtoB);
+//  String head = eventsFromAtoB[0].timeStart.substring(0, 8) + "T073000Z";
+//  for (int i=0; i<eventsFromAtoB.length; i++) {
+//    if (anyIn(entity, eventsFromAtoB[i].teacher) || anyIn(entity, eventsFromAtoB[i].groupe)) {
+//      try {
+//        empty[k] = new Event();
+//        if (eod) {
+//          empty[k + 1] = new Event();
+//        }
+//      }
+//      catch (ArrayIndexOutOfBoundsException e) {
+//        Event[] tmp = empty;
+//        empty = new Event[empty.length * 3];
+//        for (int a = 0; a<tmp.length; a++) {
+//          empty[a] = tmp[a];
+//        }
+//        tmp = null;
+//        empty[k] = new Event();
+//        if (eod) {
+//          empty[k + 1] = new Event();
+//        }
+//      }
+//      if (eod) {
+//        empty[k + 1].timeStart = head;
+//        empty[k + 1].groupe = new String[1];
+//        empty[k + 1].groupe[0] = "S1G1";
+//         empty[k + 1].summary = "";
+//         empty[k + 1].location = new String[0];
+//        empty[k + 1].timeEnd = eventsFromAtoB[i].timeStart;
+//        empty[k].timeStart = last.timeEnd;
+//        empty[k].groupe = new String[1];
+//        empty[k].summary = "";
+//        empty[k].location = new String[0];
+//        empty[k].groupe[0] = "S1G1";
+//        empty[k].timeEnd = last.timeEnd.substring(0, 8) + "T180000Z";
+//      } else {
+//        empty[k].timeStart = head;
+//        empty[k].groupe = new String[1];
+//        empty[k].summary = "";
+//        empty[k].location = new String[0];
+//        empty[k].groupe[0] = "S1G1";
+//        empty[k].timeEnd = eventsFromAtoB[i].timeStart;
+//      }
+//      last = eventsFromAtoB[i];
+//      head = eventsFromAtoB[i].timeEnd;
+//      k++;
+//      if (eod) {
+//        k++;
+//        eod = false;
+//      }
+//    }
+//    if (!eventsFromAtoB[i].timeStart.substring(0, 8).equals(head.substring(0, 8))) {
+//      eod = true;
+//      head = eventsFromAtoB[i].timeStart.substring(0, 8) + "T073000Z";
+//    }
+//  }
+//  Event[] result = new Event[k];
+//  System.arraycopy(empty, 0, result, 0, k);
+//  return result;
+//}
+
+Event[][] crenauxCommuns(SousGroupe[] tab) {
+  Event[][] res= new Event[1][];
+  int max=0;
+  for (int i=0; i<LSTEVENTS.length; i++) {
+    if (max<LSTEVENTS[i].length) max=LSTEVENTS[i].length;
+  }
+  Event[][] tmp=new Event[tab.length][max];
+  Event[][] tmp2=new Event[tab.length][max];
+  for (int i=0; i< LSTEVENTS.length; i++) {
+    for (int j=0; j<LSTEVENTS[i].length; j++) {
+      for (int l=0; l<tab.length; l++) {
+        for (int k=0; k<LSTEVENTS[i][j].groupe.length; k++) {
+          if (LSTEVENTS[i][j].groupe[k]!=null && tab[l].nomSsGroupe.contains(LSTEVENTS[i][j].groupe[k])) {
+            tmp[l][j]=LSTEVENTS[i][j];
+          } else if (LSTEVENTS[i][j].groupe[k]!=null && tab[l].nomSsGroupe.equals("Mob.1") &&( LSTEVENTS[i][j].groupe[k].equals("Mob.1")|| LSTEVENTS[i][j].groupe[k].equals("Mobile")||LSTEVENTS[i][j].groupe[k].equals("BUT3"))) {
+            tmp[l][j]=LSTEVENTS[i][j];
+          } else if (LSTEVENTS[i][j].groupe[k]!=null && tab[l].nomSsGroupe.equals("Mob.2") &&( LSTEVENTS[i][j].groupe[k].equals("Mob.2")|| LSTEVENTS[i][j].groupe[k].equals("Mobile")||LSTEVENTS[i][j].groupe[k].equals("BUT3"))) {
+            tmp[l][j]=LSTEVENTS[i][j];
+          } else if (LSTEVENTS[i][j].groupe[k]!=null && tab[l].nomSsGroupe.equals("Web.1") &&( LSTEVENTS[i][j].groupe[k].equals("Web.1")|| LSTEVENTS[i][j].groupe[k].equals("Web")||LSTEVENTS[i][j].groupe[k].equals("BUT3"))) {
+            tmp[l][j]=LSTEVENTS[i][j];
+          } else if (LSTEVENTS[i][j].groupe[k]!=null && tab[l].nomSsGroupe.equals("Web.2") &&( LSTEVENTS[i][j].groupe[k].equals("Web.2")|| LSTEVENTS[i][j].groupe[k].equals("Web")||LSTEVENTS[i][j].groupe[k].equals("BUT3"))) {
+            tmp[l][j]=LSTEVENTS[i][j];
+          }
         }
       }
-      catch (ArrayIndexOutOfBoundsException e) {
-        Event[] tmp = empty;
-        empty = new Event[empty.length * 3];
-        for (int a = 0; a<tmp.length; a++) {
-          empty[a] = tmp[a];
-        }
-        tmp = null;
-        empty[k] = new Event();
-        if (eod) {
-          empty[k + 1] = new Event();
-        }
-      }
-      if (eod) {
-        empty[k + 1].timeStart = head;
-        empty[k + 1].groupe = new String[1];
-        empty[k + 1].groupe[0] = "S1G1";
-        empty[k + 1].summary = "";
-        empty[k + 1].location = new String[0];
-        empty[k + 1].timeEnd = eventsFromAtoB[i].timeStart;
-        empty[k].timeStart = last.timeEnd;
-        empty[k].groupe = new String[1];
-        empty[k].summary = "";
-        empty[k].location = new String[0];
-        empty[k].groupe[0] = "S1G1";
-        empty[k].timeEnd = last.timeEnd.substring(0, 8) + "T180000Z";
-      } else {
-        empty[k].timeStart = head;
-        empty[k].groupe = new String[1];
-        empty[k].summary = "";
-        empty[k].location = new String[0];
-        empty[k].groupe[0] = "S1G1";
-        empty[k].timeEnd = eventsFromAtoB[i].timeStart;
-      }
-      last = eventsFromAtoB[i];
-      head = eventsFromAtoB[i].timeEnd;
-      k++;
-      if (eod) {
-        k++;
-        eod = false;
-      }
-    }
-    if (!eventsFromAtoB[i].timeStart.substring(0, 8).equals(head.substring(0, 8))) {
-      eod = true;
-      head = eventsFromAtoB[i].timeStart.substring(0, 8) + "T073000Z";
     }
   }
-  Event[] result = new Event[k];
-  System.arraycopy(empty, 0, result, 0, k);
-  return result;
+
+  for (int i=0; i<tmp.length; i++) {
+    tmp[i]=delNull(tmp[i]);
+    triEvent(tmp[i]);
+    for (int j=0; j<tmp[i].length-1; j++) {
+      if (tmp[i][j].timeEnd.substring(0, 8).equals(tmp[i][j+1].timeStart.substring(0, 8))) {
+        tmp2[i][j]=new Event();
+        tmp2[i][j].timeStart=tmp[i][j].timeEnd;
+        tmp2[i][j].timeEnd=tmp[i][j+1].timeStart;
+        tmp2[i][j].summary="Créneau vide commun";
+        tmp2[i][j].location= new String[0];
+        tmp2[i][j].groupe=new String[tab.length];
+        for (int a=0; a<tab.length; a++) tmp2[i][j].groupe[a]=tab[a].nomSsGroupe;
+        tmp2[i][j].teacher= new String[0];
+      } 
+      else if (compTime(tmp[i][j+1].timeStart, tmp[i][j+1].timeStart.substring(0, 8)+"T083000Z")) {
+        tmp2[i][j]=new Event();
+        tmp2[i][j].timeStart=tmp[i][j+1].timeStart.substring(0, 8)+"T083000Z";
+        tmp2[i][j].timeStart=tmp[i][j+1].timeStart;
+        tmp2[i][j].summary="Créneau vide commun";
+        tmp2[i][j].location= new String[0];
+        tmp2[i][j].groupe=new String[tab.length];
+        for (int a=0; a<tab.length; a++) tmp2[i][j].groupe[a]=tab[a].nomSsGroupe;
+        tmp2[i][j].teacher= new String[0];
+      }
+
+      if (compTime(tmp[i][j].timeEnd.substring(0, 8)+"T174500Z", tmp[i][j].timeEnd)) {
+        tmp2[i][j]=new Event();
+        tmp2[i][j].timeStart=tmp[i][j].timeEnd;
+        tmp2[i][j].timeEnd=tmp[i][j].timeEnd.substring(0, 8)+"T174500Z";
+        tmp2[i][j].summary="Créneau vide commun";
+        tmp2[i][j].location= new String[0];
+        tmp2[i][j].groupe=new String[tab.length];
+        for (int a=0; a<tab.length; a++) tmp2[i][j].groupe[a]=tab[a].nomSsGroupe;
+        tmp2[i][j].teacher= new String[0];
+      }
+    }
+  }
+
+
+
+  return res;
 }
