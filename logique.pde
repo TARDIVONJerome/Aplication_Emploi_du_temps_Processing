@@ -57,12 +57,12 @@ boolean contains(String[] array, String str) {
   return false;
 }
 
-int addWeek(int date) {
+int addDays(int date, int days) {
   int year = date / 10000;
   int month = (date / 100) % 100;
   int day = date % 100;
 
-  day += 7;
+  day += days;
 
   int daysInMonth = getDaysInMonth(year, month);
   if (day > daysInMonth) {
@@ -111,4 +111,22 @@ int getDaysInMonth(int year, int month) {
 
 boolean isLeapYear(int year) {
   return (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0));
+}
+
+float[] peopleOverTime(int date1, int date2){
+  FloatList list = new FloatList();
+  while(date1 < date2){
+    list.append(present(date1 + ""));
+    date1 = addDays(date1, 1);
+  }
+  
+  return list.toArray();
+}
+
+float[] randomFloats(int nb){
+  float[] res = new float[nb];
+  for (int i = 0; i < nb; i++){
+    res[i] = random(0, 500);
+  }
+  return res;
 }

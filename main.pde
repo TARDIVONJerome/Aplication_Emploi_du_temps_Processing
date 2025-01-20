@@ -209,7 +209,9 @@ void setup() {
   contPanel = new Controls(0, 0, Displaywidth, 50);
   contPanel.statDropdown.selected = "graph";
   graph = new Graph(0, 50, 1080, 700);
-  float[] data = {50.2, 62.0, 10.0, 152.0};
+  //float[] data = peopleOverTime(20240902, 20250124);
+  float[] data = randomFloats(200);
+  printArray(data);
   graph.setContent(data);
   EdtWin[0] = new Edt(0, 50, 1080, 700);
 }

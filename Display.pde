@@ -267,8 +267,8 @@ class Graph extends Window {
       }
     }
 
-    this.Xscale = (this.sx - (this.marge * 2) - this.x) / this.content.length;
-    this.Yscale = (this.sy - (this.marge * 2) - this.y) / (this.content[this.max] - this.content[this.min]);
+    this.Xscale = (this.sx - (this.marge * 2) - this.x) / (this.content.length);
+    this.Yscale = (this.sy - (this.marge) - this.y) / (this.content[this.max] - this.content[this.min]);
   }
 
   void display() {
@@ -278,33 +278,32 @@ class Graph extends Window {
     if (content != null) {
       for (int i = (int)content[min]; i < content[max]; i += Yscale) {
         line(this.x + this.marge/2, // X
-          (this.y + this.sy) - (this.y + this.Yscale * i - this.marge) - this.marge, // Y
+          (this.y + this.sy) - (this.y + this.Yscale * (i - content[min]) + this.Yscale * 2), // Y
           this.x + this.marge, // X
-          (this.y + this.sy) - (this.y + this.Yscale * i - this.marge) - this.marge // Y
+          (this.y + this.sy) - (this.y + this.Yscale * (i - content[min]) + this.Yscale * 2) // Y
           );
-          
+
         text(i,
           this.x + this.marge/4,
-          (this.y + this.sy) - (this.y + this.Yscale * i - this.marge) - this.marge + 3
+          (this.y + this.sy) - (this.y + this.Yscale * (i - content[min]) + this.Yscale * 2) + 3
           );
       }
 
       circle(this.x + this.Xscale * 0 + this.marge, // X
-        (this.y + this.sy) - (this.y + this.Yscale * content[0] - this.marge) - this.marge, // Y
-        10 // R
+        (this.y + this.sy) - (this.y + this.Yscale * (content[0] - content[min]) + this.Yscale * 2), // Y
+        2 // R
         );
-        text(0, this.x + this.Xscale * 0 + this.marge - textWidth("" + 0)/2, this.y + this.sy - this.marge/4);
 
       for (int i = 1; i < content.length; i++) {
         circle(this.x + this.Xscale * i + this.marge, // X
-          (this.y + this.sy) - (this.y + this.Yscale * content[i] - this.marge) - this.marge, // Y
-          10 // R
+          (this.y + this.sy) - (this.y + this.Yscale * (content[i] - content[min]) + this.Yscale * 2), // Y
+          2 // R
           );
 
         line(this.x + this.Xscale * (i - 1) + this.marge, // X
-          (this.y + this.sy) - (this.y + this.Yscale * content[i - 1] - this.marge) - this.marge, // Y
+          (this.y + this.sy) - (this.y + this.Yscale * (content[i - 1] - content[min]) + this.Yscale * 2), // Y
           this.x + this.Xscale * i + this.marge, // X
-          (this.y + this.sy) - (this.y + this.Yscale * content[i] - this.marge) - this.marge // Y
+          (this.y + this.sy) - (this.y + this.Yscale * (content[i] - content[min]) + this.Yscale * 2) // Y
           );
 
         line(this.x + this.Xscale * i + this.marge, // X
@@ -312,7 +311,6 @@ class Graph extends Window {
           this.x + this.Xscale * i + this.marge, // X
           this.y + this.sy - this.marge // Y
           );
-         text(i, this.x + this.Xscale * i + this.marge - textWidth("" + i)/2, this.y + this.sy - this.marge/4);
       }
     }
   }

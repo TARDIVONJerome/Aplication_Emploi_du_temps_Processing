@@ -1,5 +1,5 @@
-int present(String date) { //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
-  int cpt=0;
+int present(String date) { //<>// //<>// //<>//
+  int cpt = 0;
   SousGroupe[] tab=new SousGroupe[LSTSOUSGROUPES.length];
   arrayCopy(LSTSOUSGROUPES, tab);
   for (int i=0; i<LSTEVENTS.length; i++) {
@@ -88,7 +88,6 @@ Event[][] initExam() {
 }
 
 int duree(Event event) {
-
   int m1=int(event.timeStart.substring(9, 11))*60+int(event.timeStart.substring(11, 13));
   int m2=int(event.timeEnd.substring(9, 11))*60+int(event.timeEnd.substring(11, 13));
   return m2-m1;
