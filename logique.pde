@@ -44,7 +44,7 @@ int Cweek(int annee, int mois, int jour) {
 
   int jourSemaine = somme % 7;
 
-  return (jourSemaine + 6) % 7;
+  return (jourSemaine + 5) % 7;
 }
 
   

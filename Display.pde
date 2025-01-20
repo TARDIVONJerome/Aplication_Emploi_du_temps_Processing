@@ -103,7 +103,7 @@ class Edt extends Window {
   void displayweek() {
     for (int u=0; u<LSTEVENTS.length; u++) {
       for (int i=LSTEVENTS[u].length-1; i>0; i--) {
-        if (DDS<=AMJ(LSTEVENTS[u][i]) && DFS>=AMJ(LSTEVENTS[u][i]) && contains(LSTEVENTS[u][i].groupe, SGROUPE ) || contains(LSTEVENTS[u][i].location, SROOM )) {
+        if (DDS<=AMJ(LSTEVENTS[u][i]) && DFS>=AMJ(LSTEVENTS[u][i]) && (contains(LSTEVENTS[u][i].groupe, SGROUPE ) || contains(LSTEVENTS[u][i].location, SROOM ))) {
           displayhoraire(LSTEVENTS[u][i], Cweek(autre(LSTEVENTS[u][i], 0, 4), autre(LSTEVENTS[u][i], 4, 6), autre(LSTEVENTS[u][i], 6, 8)), Hm(LSTEVENTS[u][i]), HmF(LSTEVENTS[u][i]));
         }
       }
@@ -116,10 +116,7 @@ class Edt extends Window {
     }
 
     fill(105, 15, 88);
-    if (jour > 5.0 || jour < 1.0){
-      println(jour);
-    }
-    
+
     rect(this.daySize * jour + this.marge, this.y + 10, this.daySize * (jour + 1) + marge, this.y + 20);
     fill(255, 255, 255);
     //if (h-y>=100)text(event.summary, ((this.x + this.sx)-ecare)/5*(x-1)+(((this.x + this.sx)-ecare)/5)/2+first_ele, (((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*(y/100-8)+((this.y + this.sy)/8+50)+15);
@@ -194,27 +191,22 @@ class Controls extends Window {
       (int)(x + sx)/10,
       (int)(y + sy)/2,
       "Select Stats",
-      addStats(new String[]{"graph,%"}));
+      addStats(new String[]{"edt", "graph"}));
   }
 
   void clicked(int ex, int ey) {
     if (groupDropdown.estClique(ex, ey)) {
       SGROUPE = groupDropdown.selected;
-      println("Selected Group: " + SGROUPE);
-      SROOM = null;
-      SSTATS = null;
+      SROOM = "";
     }
     if (salleDropdown.estClique(ex, ey)) {
       SROOM = salleDropdown.selected;
-      println("Selected salle: " + SROOM);
-      SGROUPE = null;
-      SSTATS = null;
+      SGROUPE = "";
     }
     if (statDropdown.estClique(ex, ey)) {
       SSTATS = statDropdown.selected;
-      println("Selected Group: " + SSTATS);
-      SGROUPE = null;
-      SROOM = null;
+      SGROUPE = "";
+      SROOM = "";
     }
   }
 
@@ -248,5 +240,80 @@ class Controls extends Window {
     groupDropdown.display();
     salleDropdown.display();
     statDropdown.display();
+  }
+}
+
+class Graph extends Window {
+  int marge = 60;
+  float[] content;
+  float Xscale;
+  float Yscale;
+  int min, max;
+
+  Graph(int x, int y, int sx, int sy) {
+    super(x, y, sx, sy);
+  }
+
+  void setContent(float[] content) {
+    this.content = content;
+    this.min = 0;
+    this.max = 0;
+
+    for (int i = 0; i < this.content.length; i++) {
+      if (this.content[i] > this.content[this.max]) {
+        this.max = i;
+      } else if (this.content[i] < this.content[this.min]) {
+        this.min = i;
+      }
+    }
+
+    this.Xscale = (this.sx - (this.marge * 2) - this.x) / this.content.length;
+    this.Yscale = (this.sy - (this.marge * 2) - this.y) / (this.content[this.max] - this.content[this.min]);
+  }
+
+  void display() {
+    textSize(8);
+    line(this.x + this.marge, this.y + this.marge, this.x + marge, this.y + this.sy - this.marge/2);
+    line(this.x + this.marge, this.y + this.sy - this.marge, this.x + this.sx - marge, this.y + this.sy - this.marge);
+    if (content != null) {
+      for (int i = (int)content[min]; i < content[max]; i += Yscale) {
+        line(this.x + this.marge/2, // X
+          (this.y + this.sy) - (this.y + this.Yscale * i - this.marge) - this.marge, // Y
+          this.x + this.marge, // X
+          (this.y + this.sy) - (this.y + this.Yscale * i - this.marge) - this.marge // Y
+          );
+          
+        text(i,
+          this.x + this.marge/4,
+          (this.y + this.sy) - (this.y + this.Yscale * i - this.marge) - this.marge + 3
+          );
+      }
+
+      circle(this.x + this.Xscale * 0 + this.marge, // X
+        (this.y + this.sy) - (this.y + this.Yscale * content[0] - this.marge) - this.marge, // Y
+        10 // R
+        );
+        text(0, this.x + this.Xscale * 0 + this.marge - textWidth("" + 0)/2, this.y + this.sy - this.marge/4);
+
+      for (int i = 1; i < content.length; i++) {
+        circle(this.x + this.Xscale * i + this.marge, // X
+          (this.y + this.sy) - (this.y + this.Yscale * content[i] - this.marge) - this.marge, // Y
+          10 // R
+          );
+
+        line(this.x + this.Xscale * (i - 1) + this.marge, // X
+          (this.y + this.sy) - (this.y + this.Yscale * content[i - 1] - this.marge) - this.marge, // Y
+          this.x + this.Xscale * i + this.marge, // X
+          (this.y + this.sy) - (this.y + this.Yscale * content[i] - this.marge) - this.marge // Y
+          );
+
+        line(this.x + this.Xscale * i + this.marge, // X
+          this.y + this.sy - this.marge/2, // Y
+          this.x + this.Xscale * i + this.marge, // X
+          this.y + this.sy - this.marge // Y
+          );
+         text(i, this.x + this.Xscale * i + this.marge - textWidth("" + i)/2, this.y + this.sy - this.marge/4);
+      }
+    }
   }
 }

@@ -9,11 +9,11 @@ final int Displayheight=1050;
 PFont myFont;
 Edt[] EdtWin = new Edt[3];
 Controls contPanel;
-String SGROUPE = null;
-String SROOM = null;
-String SSTATS = null;
+String SGROUPE = "";
+String SROOM = "";
+String SSTATS = "graph";
 String[] items;
-DropdownMenu menu;
+Graph graph;
 int cooldown = 0;
 
 
@@ -207,6 +207,10 @@ void setup() {
   textFont(myFont);
   textSize(18);
   contPanel = new Controls(0, 0, Displaywidth, 50);
+  contPanel.statDropdown.selected = "graph";
+  graph = new Graph(0, 50, 1080, 700);
+  float[] data = {50.2, 62.0, 10.0, 152.0};
+  graph.setContent(data);
   EdtWin[0] = new Edt(0, 50, 1080, 700);
 }
 
@@ -217,6 +221,11 @@ void draw() {
     contPanel.clicked(mouseX, mouseY);
     cooldown = 10;
   }
-  EdtWin[0].display();
+  if(SSTATS.equals("edt")){
+    EdtWin[0].display();
+  } else if (SSTATS.equals("graph")){
+    graph.display();
+  }
+  
   contPanel.display();
 }
