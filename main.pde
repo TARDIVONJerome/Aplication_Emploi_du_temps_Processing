@@ -1,9 +1,29 @@
-PFont myFont;
-Salle[] LSTSALLES;
+Salle[] LSTSALLES; //<>// //<>//
 SousGroupe[] LSTSOUSGROUPES;
 String[] LSTPROFS;
-Event[] LSTEVENTS;
+Event[][] LSTEVENTS;
 
+
+final int Displaywidth=1900;
+final int Displayheight=1050;
+PFont myFont;
+Edt[] EdtWin = new Edt[3];
+Controls contPanel;
+String SGROUPE = null;
+String SROOM = null;
+String SSTATS = null;
+String[] items;
+DropdownMenu menu;
+int cooldown = 0;
+
+
+
+int nbH=12;
+int annee = year();
+int mois = month();
+int jour = day();
+int DDS =annee*10000+mois*100+jour-Cweek(annee, mois, jour);
+int DFS =DDS+7;
 
 boolean compTime(String time1, String time2) {
   time1 = time1.substring(0, 15);
@@ -44,9 +64,15 @@ Event[] initEvents(String path) {
     } else if (tmp[0].equals("SUMMARY")) {
       toPush.summary = tmp[1];
     } else if (tmp[0].equals("LOCATION")) {
-      try{
-      toPush.location = tmp[1].split("\\\\,");
-      } catch (ArrayIndexOutOfBoundsException e){
+      try {
+        DescTmp[0] = lines[i].substring(1);
+        if (lines[i + 1].charAt(0) == ' ') {
+          DescTmp[0] += lines[i + 1].substring(1);
+          i++;
+        }
+        toPush.location = DescTmp[0].split(":")[1].split("\\\\,");
+      }
+      catch (ArrayIndexOutOfBoundsException e) {
         toPush.location = new String[0];
       }
     } else if (tmp[0].equals("DESCRIPTION")) {
@@ -165,30 +191,32 @@ void triEvent(Event[] tab) {
   }
 }
 
-
-void settings() {
-  size(Displaywidth, Displayheight);
-}
-
 void setup() {
-  myFont = createFont("Arial", 32);  // Charger la police une seule fois
-  textFont(myFont);
+  size(1080, 750);
+  
   LSTSALLES=initSalles("salles.csv");
   LSTSOUSGROUPES=initSousGroupes("etudiants.csv");
   LSTPROFS=initProfs("enseignants.csv");
   String[] files={"INFO-BUT1-S1.ics", "INFO-BUT2-S3.ics", "INFO-BUT3-S5.ics", "INFO-LP-ESSIR.ics"};
-  
-  
-  Event[][] LSTEVENTS=new Event[files.length][];
+  LSTEVENTS=new Event[files.length][];
   for (int i=0; i<LSTEVENTS.length; i++) {
     LSTEVENTS[i]=delNull(initEvents(files[i]));
     triEvent(LSTEVENTS[i]);
   }
-
-
-
-  initDisplay();
-  rectMode(CORNERS);
+  myFont = createFont("Arial", 32);
+  textFont(myFont);
+  textSize(18);
+  contPanel = new Controls(0, 0, Displaywidth, 50);
+  EdtWin[0] = new Edt(0, 50, 1080, 700);
 }
 
-//AAAAMMDD"t"HHMMSS"z"
+void draw() {
+  background(255);
+  cooldown--;
+  if (mousePressed && cooldown <= 0) {
+    contPanel.clicked(mouseX, mouseY);
+    cooldown = 10;
+  }
+  EdtWin[0].display();
+  contPanel.display();
+}

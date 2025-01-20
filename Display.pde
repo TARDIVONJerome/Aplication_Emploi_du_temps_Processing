@@ -1,154 +1,252 @@
-import controlP5.*;
+class Window { //<>//
+  float x, y, sx, sy;
+  float vx = 0;
+  float vy = 0;
+  int destx, desty;
+  int weight = 4;
 
-
-final int Displaywidth=1500;
-final int Displayheight=1000;
-
-int nbH=12;
-int first_ele=100;
-int ecare =first_ele+40;
-
-ControlP5 cp5;
-DropdownList groupDropdown;
-DropdownList salleDropdown;
-DropdownList statDropdown;
-String selectedGroup = "";
-Bouton prochain=new Bouton();
-Bouton precedent=new Bouton();
-
-void initDisplay() {
-
-  prochain.init(30, 30, "flèche.png");
-  precedent.init(30, 30, "flèche2.png");
-  prochain.actif=true;
-  precedent.actif=true;
-
-  cp5 = new ControlP5(this);
-
-  groupDropdown = cp5.addDropdownList("Select Group") //liste Deroulante des groupes
-    .setPosition(width/10, height/16-10)
-    .setSize(width/5, width/5)
-    .setBarHeight(30)
-    .setItemHeight(25)
-    .setColorBackground(color(100, 100, 255))
-    .setColorActive(color(200, 100, 100))
-    .setColorForeground(color(150, 150, 255));
-
-  salleDropdown = cp5.addDropdownList("Select salle") //liste Deroulante des salles
-    .setPosition(width/10+width/5+20, height/16-10)
-    .setSize(width/5, width/5)
-    .setBarHeight(30)
-    .setItemHeight(25)
-    .setColorBackground(color(100, 100, 255))
-    .setColorActive(color(200, 100, 100))
-    .setColorForeground(color(150, 150, 255));
-    
-  statDropdown = cp5.addDropdownList("Select Stats") //liste Deroulante des salles
-    .setPosition(width/10+width/5*2+40, height/16-10)
-    .setSize(width/5, width/5)
-    .setBarHeight(30)
-    .setItemHeight(25)
-    .setColorBackground(color(100, 100, 255))
-    .setColorActive(color(200, 100, 100))
-    .setColorForeground(color(150, 150, 255));
-    
-  groupDropdown.close();
-  salleDropdown.close();
-  statDropdown.close();
-  addGroups(new String[]{"Group 1", "Group 2", "Group 3", "Group 4", "Group 5"});
-  addSalles(new String[]{"0.04", "0.05", "0.06", "0.07", "0.08", "0.09"});
-  addStats(new String[]{"graph,%"});
-}
-
-
-
-void Edt() {
-
-  fill(255);
-  stroke(0);
-  rect(first_ele, height/8+10, (width-ecare)/5+first_ele-10, height-20);
-  rect((width-ecare)/5+first_ele, height/8+10, (width-ecare)/5*2+first_ele-10, height-20);
-  rect((width-ecare)/5*2+first_ele, height/8+10, (width-ecare)/5*3+first_ele-10, height-20);
-  rect((width-ecare)/5*3+first_ele, height/8+10, (width-ecare)/5*4+first_ele-10, height-20);
-  rect((width-ecare)/5*4+first_ele, height/8+10, (width-ecare)+first_ele-10, height-20);
-  Boutons();
-  textAlign(CENTER, CENTER);
-
-  fill(0, 0, 0);
-  text("Lundi", ((width-ecare)/5)/2+first_ele, (height/8+30));
-  text("Mardi", (width-ecare)/5+((width-ecare)/5)/2+first_ele, (height/8+30));
-  text("Mercredi", (width-ecare)/5*2+((width-ecare)/5)/2+first_ele, (height/8+30));
-  text("Jeudi", (width-ecare)/5*3+((width-ecare)/5)/2+first_ele, (height/8+30));
-  text("Vendredi", (width-ecare)/5*4+((width-ecare)/5)/2+first_ele, (height/8+30));
-
-
-  heure();
-}
-
-void Boutons() {
-  prochain.x=width-40;
-  prochain.y=height/2;
-  prochain.dessin();
-
-  precedent.x=12;
-  precedent.y=height/2;
-  precedent.dessin();
-}
-
-void addGroups(String[] groups) {
-  for (int i = 0; i < groups.length; i++) {
-    groupDropdown.addItem(groups[i], i);
+  Window(int x, int y, int sx, int sy) {
+    this.x = x;
+    this.y = y;
+    this.sx = sx;
+    this.sy = sy;
   }
-}
-void addSalles(String[] salles) {
-  for (int i = 0; i < salles.length; i++) {
-    salleDropdown.addItem(salles[i], i);
-  }
-}
 
-void addStats(String[] Stats) {
-  for (int i = 0; i < Stats.length; i++) {
-    statDropdown.addItem(Stats[i], i);
-  }
-}
 
-void controlEvent(ControlEvent theEvent) {
-  if (theEvent.isFrom(groupDropdown)) {
-    selectedGroup = groupDropdown.getItem((int) theEvent.getValue()).get("name").toString();
-    println("Selected Group: " + selectedGroup);
-    
+  void swipe(String dest) {
+    if (dest.equals("UP")) {
+      vy = -sqrt(-2 * -(weight) * abs(-(this.y - this.sy) - this.y));
+      desty -= (int)(this.sy);
+      destx = 0;
+    } else if (dest.equals("DOWN")) {
+      vy = sqrt(-2 * -(weight) * abs(-(this.y + this.sy) - this.y));
+      desty += (int)(this.sy);
+      destx = 0;
+    } else if (dest.equals("RIGHT")) {
+      vx = sqrt(-2 * -(weight) * abs(-(this.x + this.sx) - this.x));
+      desty = 0;
+      destx += (int)(this.sx);
+    } else if (dest.equals("LEFT")) {
+      vx = -sqrt(-2 * -(weight) * abs(-(this.x - this.sx) - this.x));
+      desty = 0;
+      destx -= (int)(this.sx);
+    }
   }
-}
 
-void heure() {
-  fill(0, 0, 0);
-  for (int i=0; i<nbH; i++) {
-    if (i!=nbH-1) {
-      text(8+i+":00", 70, ((height-20)-(height/8+50))/(nbH-1)*i+(height/8+50));
-      for (int y=1; y<51; y++) {
-        if (y%2==0)line((width-ecare)/50*(y-1)+first_ele-15, ((height-20)-(height/8+50))/(nbH-1)*i+(height/8+50), (width-ecare)/50*y+first_ele-15, ((height-20)-(height/8+50))/(nbH-1)*i+(height/8+50));
-        
+  void update() {
+    if (vx != 0 || vy != 0) {
+      x += vx;
+      y += vy;
+
+      if (vx > 0) {
+        vx -= weight;
+        if (vx < 0) vx = 0;
+      } else if (vx < 0) {
+        vx += weight;
+        if (vx > 0) vx = 0;
       }
-    } else text(">"+(8+i)+":00", 70, ((height-20)-(height/8+50))/(nbH-1)*i+(height/8+50));
+
+      if (vy > 0) {
+        vy -= weight;
+        if (vy < 0) vy = 0;
+      } else if (vy < 0) {
+        vy += weight;
+        if (vy > 0) vy = 0;
+      }
+    } else {
+      this.x = this.destx;
+      this.y = this.desty;
+    }
   }
 }
 
-int Hm(Event event){                  
-  return parseInt(event.timeStart.substring(9,12));
+class Edt extends Window {
+
+  Bouton prochain;
+  Bouton precedent;
+  int marge = 40;
+  int daySize;
+
+  Edt(int x, int y, int sx, int sy) {
+    super(x, y, sx, sy);
+
+    prochain = new Bouton(30, 30, 30, 30, "flèche.png");
+    precedent = new Bouton(30, 30, 30, 30, "flèche2.png");
+    prochain.actif=true;
+    precedent.actif=true;
+    daySize = (sy - (marge * 2) - y) / 7;
+  }
+
+  void displayboutons() {
+    prochain.x=(int)(this.x + this.sx)-40;
+    prochain.y=(int)(this.y + this.sy)/2;
+    prochain.display();
+
+    precedent.x=12;
+    precedent.y=(int)(this.y + this.sy)/2;
+    precedent.display();
+  }
+
+  /*
+  void displayheure() {
+   fill(0, 0, 0);
+   for (int i=0; i<nbH; i++) {
+   if (i!=nbH-1) {
+   text(8+i+":00", 70, (((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*i+((this.y + this.sy)/8+50));
+   for (int y=1; y<51; y++) {
+   if (y%2==0)line(((this.x + this.sx)-ecare)/50*(y-1)+first_ele-15, (((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*i+((this.y + this.sy)/8+50), ((this.x + this.sx)-ecare)/50*y+first_ele-15, (((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*i+((this.y + this.sy)/8+50));
+   }
+   } else text(">"+(8+i)+":00", 70, (((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*i+((this.y + this.sy)/8+50));
+   }
+   }
+   */
+  void displayweek() {
+    for (int u=0; u<LSTEVENTS.length; u++) {
+      for (int i=LSTEVENTS[u].length-1; i>0; i--) {
+        if (DDS<=AMJ(LSTEVENTS[u][i]) && DFS>=AMJ(LSTEVENTS[u][i]) && contains(LSTEVENTS[u][i].groupe, SGROUPE ) || contains(LSTEVENTS[u][i].location, SROOM )) {
+          displayhoraire(LSTEVENTS[u][i], Cweek(autre(LSTEVENTS[u][i], 0, 4), autre(LSTEVENTS[u][i], 4, 6), autre(LSTEVENTS[u][i], 6, 8)), Hm(LSTEVENTS[u][i]), HmF(LSTEVENTS[u][i]));
+        }
+      }
+    }
+  }
+
+  void displayhoraire(Event event, float jour, float debut, float fin) {
+    if (fin>2000) {
+      fin=2000; // 20:00
+    }
+
+    fill(105, 15, 88);
+    if (jour > 5.0 || jour < 1.0){
+      println(jour);
+    }
+    
+    rect(this.daySize * jour + this.marge, this.y + 10, this.daySize * (jour + 1) + marge, this.y + 20);
+    fill(255, 255, 255);
+    //if (h-y>=100)text(event.summary, ((this.x + this.sx)-ecare)/5*(x-1)+(((this.x + this.sx)-ecare)/5)/2+first_ele, (((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*(y/100-8)+((this.y + this.sy)/8+50)+15);
+    //else text(event.summary, ((this.x + this.sx)-ecare)/5*(x-1)+(((this.x + this.sx)-ecare)/5)/2+first_ele, (((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*(y/100-8)+((this.y + this.sy)/8+50)+(((((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*(y/100-8+(h-y)/100)+((this.y + this.sy)/8+50))-((((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*(y/100-8)+((this.y + this.sy)/8+50)))/2);
+    //if ( event.location.length!=0 && h-y>=100) {
+    //  int TW=0;
+    //for (int i=0; i<event.location.length; i++) {
+    //  TW+=(int)textWidth(event.location[i])+10;
+    //}
+    //TW-=10;
+    //print(TW);
+    //for (int k=event.location.length, i=0; i<event.location.length; i++) {
+
+    //  if (k>5)k=5;
+    //  text(event.location[i], ((this.x + this.sx)-ecare)/5*(x-1)+(((this.x + this.sx)-ecare)/5)/2+first_ele+(i%5)*60-(k-1)*30, (((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*(y/100-8)+((this.y + this.sy)/8+50)+(((((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*(y/100-8+(h-y)/100)+((this.y + this.sy)/8+50))-((((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*(y/100-8)+((this.y + this.sy)/8+50)))/2+20*(i/5));
+    //}
+  }
+
+  void display() {
+
+
+    fill(255);
+    stroke(0);
+    /*
+    rect(first_ele, (this.y + this.sy)/8+10, ((this.x + this.sx)-ecare)/5+first_ele-10, (this.y + this.sy)-20);
+     rect(((this.x + this.sx)-ecare)/5+first_ele, (this.y + this.sy)/8+10, ((this.x + this.sx)-ecare)/5*2+first_ele-10, (this.y + this.sy)-20);
+     rect(((this.x + this.sx)-ecare)/5*2+first_ele, (this.y + this.sy)/8+10, ((this.x + this.sx)-ecare)/5*3+first_ele-10, (this.y + this.sy)-20);
+     rect(((this.x + this.sx)-ecare)/5*3+first_ele, (this.y + this.sy)/8+10, ((this.x + this.sx)-ecare)/5*4+first_ele-10, (this.y + this.sy)-20);
+     rect(((this.x + this.sx)-ecare)/5*4+first_ele, (this.y + this.sy)/8+10, ((this.x + this.sx)-ecare)+first_ele-10, (this.y + this.sy)-20);
+     
+     displayboutons();
+     
+     
+     textAlign(CENTER, CENTER);
+     fill(0);
+     text("Lundi", (((this.x + this.sx)-ecare)/5)/2+first_ele, ((this.y + this.sy)/8+30));
+     text("Mardi", ((this.x + this.sx)-ecare)/5+(((this.x + this.sx)-ecare)/5)/2+first_ele, ((this.y + this.sy)/8+30));
+     text("Mercredi", ((this.x + this.sx)-ecare)/5*2+(((this.x + this.sx)-ecare)/5)/2+first_ele, ((this.y + this.sy)/8+30));
+     text("Jeudi", ((this.x + this.sx)-ecare)/5*3+(((this.x + this.sx)-ecare)/5)/2+first_ele, ((this.y + this.sy)/8+30));
+     text("Vendredi", ((this.x + this.sx)-ecare)/5*4+(((this.x + this.sx)-ecare)/5)/2+first_ele, ((this.y + this.sy)/8+30));
+     textAlign(BASELINE);
+     */
+
+    //displayheure();
+    displayweek();
+  }
 }
 
-int AMJ(Event event){                  
-  return parseInt(event.timeStart.substring(0,7));
+class Controls extends Window {
+  DropdownMenu groupDropdown;
+  DropdownMenu salleDropdown;
+  DropdownMenu statDropdown;
+
+  Controls(int x, int y, int sx, int sy) {
+    super(x, y, sx, sy);
+    groupDropdown = new DropdownMenu((int)x + 10,
+      (int)y + 10,
+      (int)(x + sx)/10,
+      (int)(y + sy)/2,
+      "Select Group",
+      addGroups(LSTSOUSGROUPES));
+
+    salleDropdown = new DropdownMenu((int)x + (x + sx)/5 + 10 * 2,
+      (int)y + 10,
+      (int)(x + sx)/10,
+      (int)(y + sy)/2,
+      "Select salle",
+      addSalles(LSTSALLES));
+
+    statDropdown = new DropdownMenu((int)x + ((x + sx)/5) * 2 + 10 * 3,
+      (int)y + 10,
+      (int)(x + sx)/10,
+      (int)(y + sy)/2,
+      "Select Stats",
+      addStats(new String[]{"graph,%"}));
+  }
+
+  void clicked(int ex, int ey) {
+    if (groupDropdown.estClique(ex, ey)) {
+      SGROUPE = groupDropdown.selected;
+      println("Selected Group: " + SGROUPE);
+      SROOM = null;
+      SSTATS = null;
+    }
+    if (salleDropdown.estClique(ex, ey)) {
+      SROOM = salleDropdown.selected;
+      println("Selected salle: " + SROOM);
+      SGROUPE = null;
+      SSTATS = null;
+    }
+    if (statDropdown.estClique(ex, ey)) {
+      SSTATS = statDropdown.selected;
+      println("Selected Group: " + SSTATS);
+      SGROUPE = null;
+      SROOM = null;
+    }
+  }
+
+  String[] addGroups(SousGroupe[] groups) {
+    String[] items = new String[groups.length];
+    for (int i = 0; i < groups.length; i++) {
+      items[i] = groups[i].nomSsGroupe;
+    }
+    return items;
+  }
+
+  String[] addSalles(Salle[] salles) {
+    String[] items = new String[salles.length];
+    for (int i = 0; i < salles.length; i++) {
+      items[i] = salles[i].nom;
+    }
+    return items;
+  }
+
+  String[] addStats(String[] Stats) {
+    String[] items = new String[Stats.length];
+    for (int i = 0; i < Stats.length; i++) {
+      items[i] = Stats[i];
+    }
+    return items;
+  }
+
+  void display() {
+    fill(125);
+    rect(x, y, sx, sy);
+    groupDropdown.display();
+    salleDropdown.display();
+    statDropdown.display();
+  }
 }
-
-
-
-
-void draw() {
-  background(240);
-  fill(0, 255, 0);
-  rect(0, 0, width, height/8);
-  textSize(18);
-  Edt();
-}
-
