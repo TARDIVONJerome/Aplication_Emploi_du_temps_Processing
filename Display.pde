@@ -197,6 +197,7 @@ class Edt extends Window {
     textAlign(LEFT, LEFT);
     text(DatS(event, 9, 11, true)+":"+DatS(event, 11, 13, true)+"-->"+DatS(event, 9, 11, false)+":"+DatS(event, 11, 13, false), daySize * jour + first_J +5, fn-10 );
   }
+}
 
 class Graph extends Window {
   int marge = 60;
