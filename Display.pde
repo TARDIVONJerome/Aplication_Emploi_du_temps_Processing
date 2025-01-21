@@ -60,45 +60,7 @@ class Window { //<>//
   }
 }
 
-class Edt extends Window {
-
-  Bouton prochain;
-  Bouton precedent;
-  int marge = 40;
-  int margeH = 20;
-  int margeJS =50 ;
-  int first_J = 90;
-  int Edtwidth = (int)(this.x + this.sx)-marge;
-  int Edtheight = (int)(this.y + this.sy);
-  int Nbdays = 7;
-  int daySize;
-  int nbH = 12;
-  int Cday;
-  int hourSize;
-
-  Edt(int x, int y, int sx, int sy) {
-    super(x, y, sx, sy);
-
-    prochain = new Bouton(30, 30, 30, 30, "flèche.png");
-    precedent = new Bouton(30, 30, 30, 30, "flèche2.png");
-    prochain.actif=true;
-    precedent.actif=true;
-    daySize = (Edtwidth-first_J) / 7;
-    Cday=(daySize-10)/2;
-    hourSize=(int)((Edtheight-margeH)-(y+margeH+margeJS))/(nbH-1);
-  }
-
-  void displayboutons() {
-    prochain.x=(int)(this.x + this.sx)-marge;
-    prochain.y=(int)(this.y + this.sy)/2;
-    prochain.display();
-
-    precedent.x=12;
-    precedent.y=(int)(this.y + this.sy)/2;
-    precedent.display();
-  }
-
-  void displayEDT() {
+ void displayEDT() {
 
 
     stroke(0);
@@ -108,8 +70,13 @@ class Edt extends Window {
       fill(255);
       rect(daySize*i+first_J, y+margeH, daySize*(i+1)+first_J-10, Edtheight-margeH);
       fill(0);
-      if((FDS-(7-i))%100<=0)text(JSemaine[i]+(DDS+i), daySize*i+Cday+first_J, y+margeJS/2+margeH);
-      else text(JSemaine[i]+(FDS-(7-i)), daySize*i+Cday+first_J, y+margeJS/2+margeH);
+      if ((FDS-(7-i))%100>0 && (FDS-(7-i))%100<50) {
+        if (FDS%10000/100<10)text(JSemaine[i]+" "+((FDS-(7-i))%100)+"/0"+FDS%10000/100, daySize*i+Cday+first_J, y+margeJS/2+margeH);
+        else text(JSemaine[i]+" "+((FDS-(7-i))%100)+"/"+FDS%10000/100, daySize*i+Cday+first_J, y+margeJS/2+margeH);
+      } else {
+        if (DDS%10000/100<10)text(JSemaine[i]+" "+((DDS+i-1)%100)+"/0"+DDS%10000/100, daySize*i+Cday+first_J, y+margeJS/2+margeH);
+        else text(JSemaine[i]+" "+((DDS+i-1)%100)+"/"+DDS%10000/100, daySize*i+Cday+first_J, y+margeJS/2+margeH);
+      }
     }
     rectMode(CORNER);
     textAlign(RIGHT, CENTER);
@@ -134,7 +101,7 @@ class Edt extends Window {
       }
     }
     textAlign(LEFT, LEFT);
-    
+
     //    for (int u=0; u<blbl.length; u++) {
     //  for (int i=blbl[u].length-1; i>0; i--) {
     //    if (DDS<=AMJ(blbl[u][i]) && FDS>AMJ(blbl[u][i]) && (contains(blbl[u][i].groupe, SGROUPE ) || contains(blbl[u][i].location, SROOM ))) {
@@ -143,7 +110,7 @@ class Edt extends Window {
     //  }
     //}
     textAlign(LEFT, LEFT);
-    
+
     //for (int u=0; u<initExam().length; u++) {
     //  for (int i=initExam()[u].length-1; i>0; i--) {
     //    if (DDS<=AMJ(initExam()[u][i]) && FDS>AMJ(initExam()[u][i]) && (contains(initExam()[u][i].groupe, SGROUPE ) || contains(initExam()[u][i].location, SROOM ))) {
@@ -210,6 +177,7 @@ class Edt extends Window {
     displayboutons();
   }
 }
+
 
 class Graph extends Window {
   int marge = 60;
