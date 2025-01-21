@@ -265,3 +265,81 @@ class Graph extends Window {
     }
   }
 }
+
+class Controls extends Window {
+  DropdownMenu groupDropdown;
+  DropdownMenu salleDropdown;
+  DropdownMenu statDropdown;
+
+  Controls(int x, int y, int sx, int sy) {
+    super(x, y, sx, sy);
+    groupDropdown = new DropdownMenu((int)x + 10,
+      (int)y + 10,
+      (int)(x + sx)/10,
+      (int)(y + sy)/2,
+      "Select Group",
+      addGroups(LSTSOUSGROUPES));
+
+    salleDropdown = new DropdownMenu((int)x + (x + sx)/5 + 10 * 2,
+      (int)y + 10,
+      (int)(x + sx)/10,
+      (int)(y + sy)/2,
+      "Select salle",
+      addSalles(LSTSALLES));
+
+    statDropdown = new DropdownMenu((int)x + ((x + sx)/5) * 2 + 10 * 3,
+      (int)y + 10,
+      (int)(x + sx)/10,
+      (int)(y + sy)/2,
+      "Select Stats",
+      addStats(new String[]{"edt", "graph"}));
+  }
+
+  void clicked(int ex, int ey) {
+    if (groupDropdown.estClique(ex, ey)) {
+      SGROUPE = groupDropdown.selected;
+      SROOM = "";
+    }
+    if (salleDropdown.estClique(ex, ey)) {
+      SROOM = salleDropdown.selected;
+      SGROUPE = "";
+    }
+    if (statDropdown.estClique(ex, ey)) {
+      SSTATS = statDropdown.selected;
+      SGROUPE = "";
+      SROOM = "";
+    }
+  }
+
+  String[] addGroups(SousGroupe[] groups) {
+    String[] items = new String[groups.length];
+    for (int i = 0; i < groups.length; i++) {
+      items[i] = groups[i].nomSsGroupe;
+    }
+    return items;
+  }
+
+  String[] addSalles(Salle[] salles) {
+    String[] items = new String[salles.length];
+    for (int i = 0; i < salles.length; i++) {
+      items[i] = salles[i].nom;
+    }
+    return items;
+  }
+
+  String[] addStats(String[] Stats) {
+    String[] items = new String[Stats.length];
+    for (int i = 0; i < Stats.length; i++) {
+      items[i] = Stats[i];
+    }
+    return items;
+  }
+
+  void display() {
+    fill(125);
+    rect(x, y, sx, sy);
+    groupDropdown.display();
+    salleDropdown.display();
+    statDropdown.display();
+  }
+}
