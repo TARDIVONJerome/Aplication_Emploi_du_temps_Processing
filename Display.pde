@@ -161,8 +161,10 @@ class Edt extends Window {
 
   void displayhoraire(Event event, float jour, float debut, float fin) {
     textAlign(CENTER, CENTER);
-    float dbut=(hourSize*(debut-800)/100)+(y+margeH+margeJS);
-    float fn=(hourSize*(fin-800)/100)+(y+margeH+margeJS);
+    float dbut=((int)(debut/100))*100+debut%100/60*100;
+    dbut=(hourSize*(dbut-800)/100)+(y+margeH+margeJS);
+    float fn=((int)(fin/100))*100+fin%100/60*100;
+    fn=(hourSize*(fn-800)/100)+(y+margeH+margeJS);
     float Height=fn-dbut;
     rectMode(CORNERS);
     if (fin>1900) {
@@ -226,7 +228,7 @@ class Edt extends Window {
     }
     rectMode(CORNER);
     textAlign(LEFT, LEFT);
-    text(DatS(event, 9, 11, true)+":"+DatS(event, 11, 13, true)+"-->"+DatS(event, 9, 11, false)+":"+DatS(event, 11, 13, false), daySize * jour + first_J +5, fn-10 );
+    if(Height>50)text(DatS(event, 9, 11, true)+":"+DatS(event, 11, 13, true)+"-->"+DatS(event, 9, 11, false)+":"+DatS(event, 11, 13, false), daySize * jour + first_J +5, fn-10 );
   }
   void display() {
     textSize(13);
