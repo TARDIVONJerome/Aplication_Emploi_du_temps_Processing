@@ -248,7 +248,15 @@ void draw() {
     contPanel.clicked(mouseX, mouseY);
     cooldown = 10;
   }
-  
+    if(SSTATS.equals("EdtExam")){
+        if (!previousPanel.equals("EdtExam")) {
+        contPanel.groupDropdown.setItems(contPanel.addGroups(LSTSOUSGROUPES));
+        contPanel.groupDropdown.tag = "Select Group";
+        contPanel.salleDropdown.hidden = true;
+    }
+    EdtWin[0].display();
+    previousPanel = "EdtExam";
+  }
   if (SSTATS.equals("edt")) {
     if (!previousPanel.equals("edt")) {
       contPanel.groupDropdown.setItems(contPanel.addGroups(LSTSOUSGROUPES));
