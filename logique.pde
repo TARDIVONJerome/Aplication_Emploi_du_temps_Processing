@@ -168,7 +168,7 @@ float[] chargeOvertime(int date1, int date2){
   while(date1 < date2){
     
     list.append(chargeTravail(SROOM, date1 + "T000000Z", addDays(date1, 1) + "T000000Z")/24.0);
-    date1 = addDays(date1, 1);
+    date1 = addDays(date1, 7);
   }
   return list.toArray();
 }
