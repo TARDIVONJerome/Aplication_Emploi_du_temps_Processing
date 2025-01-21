@@ -1,7 +1,5 @@
 int Hm(Event event) {
-  int decalageH=100;
-  if (20241026>AMJ(event))decalageH+=decalageH;
-  return parseInt(event.timeStart.substring(9, 13))+decalageH;
+  return parseInt(event.timeStart.substring(9, 13));
 }
 
 int AMJ(Event event) {
@@ -9,9 +7,7 @@ int AMJ(Event event) {
 }
 
 int HmF(Event event) {
-  int decalageH=100;
-  if (20241026>AMJ(event))decalageH+=decalageH;
-  return parseInt(event.timeEnd.substring(9, 13))+decalageH;
+  return parseInt(event.timeEnd.substring(9, 13));
 }
 
 int Dat(Event event, int i, int k, boolean t) {
