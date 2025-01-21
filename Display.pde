@@ -1,4 +1,4 @@
-class Window { //<>//
+class Window {
   float x, y, sx, sy;
   float vx = 0;
   float vy = 0;
@@ -139,24 +139,27 @@ class Edt extends Window {
       }
     }
     textAlign(LEFT, LEFT);
+  }
+  void displayEdtCommun() {
+    for (int u=0; u<blbl.length; u++) {
+      for (int i=blbl[u].length-1; i>0; i--) {
+        if (DDS<=AMJ(blbl[u][i]) && FDS>AMJ(blbl[u][i]) && (contains(blbl[u][i].groupe, SGROUPE ) || contains(blbl[u][i].location, SROOM ))) {
+          displayhoraire(blbl[u][i], Cweek(Dat(blbl[u][i], 0, 4, true), Dat(blbl[u][i], 4, 6, true), Dat(blbl[u][i], 6, 8, true)), Hm(blbl[u][i]), HmF(blbl[u][i]));
+        }
+      }
+    }
 
-    //    for (int u=0; u<blbl.length; u++) {
-    //  for (int i=blbl[u].length-1; i>0; i--) {
-    //    if (DDS<=AMJ(blbl[u][i]) && FDS>AMJ(blbl[u][i]) && (contains(blbl[u][i].groupe, SGROUPE ) || contains(blbl[u][i].location, SROOM ))) {
-    //      displayhoraire(blbl[u][i], Cweek(Dat(blbl[u][i], 0, 4, true), Dat(blbl[u][i], 4, 6, true), Dat(blbl[u][i], 6, 8, true)), Hm(blbl[u][i]), HmF(blbl[u][i]));
-    //    }
-    //  }
-    //}
     textAlign(LEFT, LEFT);
-
-    //for (int u=0; u<initExam().length; u++) {
-    //  for (int i=initExam()[u].length-1; i>0; i--) {
-    //    if (DDS<=AMJ(initExam()[u][i]) && FDS>AMJ(initExam()[u][i]) && (contains(initExam()[u][i].groupe, SGROUPE ) || contains(initExam()[u][i].location, SROOM ))) {
-    //      displayhoraire(initExam()[u][i], Cweek(Dat(initExam()[u][i], 0, 4, true), Dat(initExam()[u][i], 4, 6, true), Dat(initExam()[u][i], 6, 8, true)), Hm(initExam()[u][i]), HmF(initExam()[u][i]));
-    //    }
-    //  }
-    //}
-    //textAlign(LEFT, LEFT);
+  }
+  void displayExam() {
+    for (int u=0; u<initExam().length; u++) {
+      for (int i=initExam()[u].length-1; i>0; i--) {
+        if (DDS<=AMJ(initExam()[u][i]) && FDS>AMJ(initExam()[u][i]) && (contains(initExam()[u][i].groupe, SGROUPE ) || contains(initExam()[u][i].location, SROOM ))) {
+          displayhoraire(initExam()[u][i], Cweek(Dat(initExam()[u][i], 0, 4, true), Dat(initExam()[u][i], 4, 6, true), Dat(initExam()[u][i], 6, 8, true)), Hm(initExam()[u][i]), HmF(initExam()[u][i]));
+        }
+      }
+    }
+    textAlign(LEFT, LEFT);
   }
 
   void displayhoraire(Event event, float jour, float debut, float fin) {
@@ -228,12 +231,21 @@ class Edt extends Window {
     }
     rectMode(CORNER);
     textAlign(LEFT, LEFT);
-    if(Height>50)text(DatS(event, 9, 11, true)+":"+DatS(event, 11, 13, true)+"-->"+DatS(event, 9, 11, false)+":"+DatS(event, 11, 13, false), daySize * jour + first_J +5, fn-10 );
+    if (Height>50)text(DatS(event, 9, 11, true)+":"+DatS(event, 11, 13, true)+"-->"+DatS(event, 9, 11, false)+":"+DatS(event, 11, 13, false), daySize * jour + first_J +5, fn-10 );
   }
   void display() {
     textSize(13);
     displayEDT();
-    displayweek();
+    if (SSTATS.equals("edt")) {
+      displayweek();
+    }
+    if (SSTATS.equals("EdtExam")) {
+      displayExam();
+    }
+    if (SSTATS.equals("EdtCommun")) {
+      displayEdtCommun();
+    }
+
     displayboutons();
   }
 }
@@ -338,7 +350,7 @@ class Controls extends Window {
 
   Controls(int x, int y, int sx, int sy) {
     super(x, y, sx, sy);
-    
+
     groupDropdown = new DropdownMenu((int)x + marge,
       (int)y + 10,
       (int)(x + sx)/3 - marge,
@@ -358,7 +370,7 @@ class Controls extends Window {
       (int)(x + sx)/3 - marge,
       (int)(y + sy)/2,
       "Select Stats",
-      addStats(new String[]{"edt", "graph"}));
+      addStats(new String[]{"edt", "EdtExam", "EdtCommun", "graph"}));
   }
 
   void clicked(int ex, int ey) {
