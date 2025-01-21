@@ -278,6 +278,10 @@ class Graph extends Window {
           (this.y + this.sy - this.marge) - (this.Yscale * (content[i] - content[min])), // Y
           4 // R
           );
+        circle(this.x + this.Xscale * (i - 1) + this.marge, // X
+          (this.y + this.sy - this.marge) - (this.Yscale * (content[i - 1] - content[min])), // Y
+          4 // R
+          );
         fill(175);
         stroke(175);
         line(this.x + this.Xscale * i + this.marge, // X
