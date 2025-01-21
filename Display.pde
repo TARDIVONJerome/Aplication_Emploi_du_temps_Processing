@@ -60,6 +60,44 @@ class Window { //<>//
   }
 }
 
+class Edt extends Window {
+
+  Bouton prochain;
+  Bouton precedent;
+  int marge = 40;
+  int margeH = 20;
+  int margeJS =50 ;
+  int first_J = 90;
+  int Edtwidth = (int)(this.x + this.sx)-marge;
+  int Edtheight = (int)(this.y + this.sy);
+  int Nbdays = 7;
+  int daySize;
+  int nbH = 12;
+  int Cday;
+  int hourSize;
+
+  Edt(int x, int y, int sx, int sy) {
+    super(x, y, sx, sy);
+
+    prochain = new Bouton(30, 30, 30, 30, "flèche.png");
+    precedent = new Bouton(30, 30, 30, 30, "flèche2.png");
+    prochain.actif=true;
+    precedent.actif=true;
+    daySize = (Edtwidth-first_J) / 7;
+    Cday=(daySize-10)/2;
+    hourSize=(int)((Edtheight-margeH)-(y+margeH+margeJS))/(nbH-1);
+  }
+
+  void displayboutons() {
+    prochain.x=(int)(this.x + this.sx)-marge;
+    prochain.y=(int)(this.y + this.sy)/2;
+    prochain.display();
+
+    precedent.x=12;
+    precedent.y=(int)(this.y + this.sy)/2;
+    precedent.display();
+  }
+
  void displayEDT() {
 
 
