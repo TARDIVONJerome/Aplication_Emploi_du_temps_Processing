@@ -260,8 +260,6 @@ void draw() {
       contPanel.groupDropdown.setItems(contPanel.addGroups(LSTSOUSGROUPES));
       contPanel.groupDropdown.tag = "Select Group";
       contPanel.salleDropdown.hidden = true;
-      contPanel.groupCDropdown.hidden = false;
-      contPanel.groupDropdown.hidden = true;
     }
     EdtWin[0].display();
     previousPanel = "EdtCommun";
