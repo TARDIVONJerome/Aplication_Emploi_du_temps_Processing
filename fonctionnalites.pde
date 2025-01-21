@@ -93,22 +93,22 @@ int duree(Event event) {
   return m2-m1;
 }
 
-int chargeTravail(SousGroupe sousGroupe, String date1, String date2) {
+int chargeTravail(String sousGroupe, String date1, String date2) {
   int cpt=0;
   for (int i=0; i<LSTEVENTS.length; i++) {
     for (int j=0; j<LSTEVENTS[i].length; j++) {
       if (compTime(LSTEVENTS[i][j].timeStart, date1)&& !compTime(LSTEVENTS[i][j].timeStart, date2)) {
         for (int k=0; k<LSTEVENTS[i][j].groupe.length; k++) {
-          if (LSTEVENTS[i][j].groupe[k]!=null && sousGroupe.nomSsGroupe.contains(LSTEVENTS[i][j].groupe[k])) {
+          if (LSTEVENTS[i][j].groupe[k]!=null && sousGroupe.contains(LSTEVENTS[i][j].groupe[k])) {
 
             cpt+=duree(LSTEVENTS[i][j]);
-          } else if (LSTEVENTS[i][j].groupe[k]!=null && sousGroupe.nomSsGroupe.equals("Mob.1") &&( LSTEVENTS[i][j].groupe[k].equals("Mob.1")|| LSTEVENTS[i][j].groupe[k].equals("Mobile")||LSTEVENTS[i][j].groupe[k].equals("BUT3"))) {
+          } else if (LSTEVENTS[i][j].groupe[k]!=null && sousGroupe.equals("Mob.1") &&( LSTEVENTS[i][j].groupe[k].equals("Mob.1")|| LSTEVENTS[i][j].groupe[k].equals("Mobile")||LSTEVENTS[i][j].groupe[k].equals("BUT3"))) {
             cpt+=duree(LSTEVENTS[i][j]);
-          } else if (LSTEVENTS[i][j].groupe[k]!=null && sousGroupe.nomSsGroupe.equals("Mob.2") &&( LSTEVENTS[i][j].groupe[k].equals("Mob.2")|| LSTEVENTS[i][j].groupe[k].equals("Mobile")||LSTEVENTS[i][j].groupe[k].equals("BUT3"))) {
+          } else if (LSTEVENTS[i][j].groupe[k]!=null && sousGroupe.equals("Mob.2") &&( LSTEVENTS[i][j].groupe[k].equals("Mob.2")|| LSTEVENTS[i][j].groupe[k].equals("Mobile")||LSTEVENTS[i][j].groupe[k].equals("BUT3"))) {
             cpt+=duree(LSTEVENTS[i][j]);
-          } else if (LSTEVENTS[i][j].groupe[k]!=null && sousGroupe.nomSsGroupe.equals("Web.1") &&( LSTEVENTS[i][j].groupe[k].equals("Web.1")|| LSTEVENTS[i][j].groupe[k].equals("Web")||LSTEVENTS[i][j].groupe[k].equals("BUT3"))) {
+          } else if (LSTEVENTS[i][j].groupe[k]!=null && sousGroupe.equals("Web.1") &&( LSTEVENTS[i][j].groupe[k].equals("Web.1")|| LSTEVENTS[i][j].groupe[k].equals("Web")||LSTEVENTS[i][j].groupe[k].equals("BUT3"))) {
             cpt+=duree(LSTEVENTS[i][j]);
-          } else if (LSTEVENTS[i][j].groupe[k]!=null && sousGroupe.nomSsGroupe.equals("Web.2") &&( LSTEVENTS[i][j].groupe[k].equals("Web.2")|| LSTEVENTS[i][j].groupe[k].equals("Web")||LSTEVENTS[i][j].groupe[k].equals("BUT3"))) {
+          } else if (LSTEVENTS[i][j].groupe[k]!=null && sousGroupe.equals("Web.2") &&( LSTEVENTS[i][j].groupe[k].equals("Web.2")|| LSTEVENTS[i][j].groupe[k].equals("Web")||LSTEVENTS[i][j].groupe[k].equals("BUT3"))) {
             cpt+=duree(LSTEVENTS[i][j]);
           }
         }
@@ -176,6 +176,19 @@ boolean anyIn(String obj1, String[] obj2) {
 Event[][] crenauxCommuns(SousGroupe[] tab) {
   Event[][] res= new Event[1][];
   int max=0;
+  int ab=0;
+  for(int i=0;i<tab.length;i++){
+    if(tab[i]!=null) ab++;
+  }
+  SousGroupe[] tabtmp=new SousGroupe[ab];
+  int v=0;
+  for(int i=0;i<tab.length;i++){
+    if(tab[i]!=null){
+      tabtmp[v]=tab[i];
+      v++;
+    }
+  }
+  tab=tabtmp;
   for (int i=0; i<LSTEVENTS.length; i++) {
     if (max<LSTEVENTS[i].length) max=LSTEVENTS[i].length;
   }
