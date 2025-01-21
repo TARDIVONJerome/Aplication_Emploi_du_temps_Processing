@@ -98,7 +98,7 @@ class Edt extends Window {
     precedent.display();
   }
 
- void displayEDT() {
+  void displayEDT() {
 
 
     stroke(0);
@@ -171,12 +171,15 @@ class Edt extends Window {
 
     fill(105, 15, 88);
     rect(daySize * jour + first_J, dbut, this.daySize * (jour + 1) + first_J - 10, fn, 20);
-    fill(255, 255, 255);
+    fill(255, 255, 0);
     int k=0;
     int p=0;
     int i=0;
+    int lengthe;
+    int TxtW=0;
+    float Hgroupe= dbut+Height/4+5;
     for (int l=0; l<Height/15; l++) {
-      int TxtW=0;
+
 
       if (textWidth(event.summary)+15>daySize)event.summary=event.summary.substring(0, 20)+"...";
       if (l==0) {
@@ -184,23 +187,40 @@ class Edt extends Window {
         else text(event.summary, daySize * jour + first_J +Cday, dbut+Height/2);
       }
       if ( event.location.length!=0 && Height>=100) {
-        for (int j=0; j<event.location.length; j++) {
-          TxtW+=(int)textWidth(event.location[j])+10;
-        }
-        TxtW-=10;
+        //  for (int j=0; j<event.location.length; j++) {
+        //    TxtW+=(int)textWidth(event.location[j])+10;
+        //  }
+        //  TxtW-=10;
         for (; i<event.location.length && i*15<Height/4; i++) {
           if (k>5)k=5;
-          text(event.location[i], daySize * jour + first_J +Cday, dbut+Height/2 + i*15);
+          text(event.location[i], daySize * jour + first_J +Cday, dbut+Height/2 + i*15 +5);
         }
       }
       if (l<Height/30 && l!=1) {
-        if ( event.teacher.length!=0 && Height>=100) {
+        if ( event.teacher.length!=0 && Height>=150) {
+          Hgroupe=dbut+Height/2 -Height/16 -5;
           for (; p<event.teacher.length && p*15<Height/4; p++) {
             if (event.teacher[p]!=null) {
+              lengthe=event.teacher.length;
+              if (Height/8<event.teacher.length)lengthe=(int)Height/8;
               if (textWidth(event.teacher[p])+5>daySize)event.teacher[p]=event.teacher[p].substring(0, 18)+"...";
-              text(event.teacher[p], daySize * jour + first_J +Cday, dbut+Height/4 +p*14 -event.teacher.length*7);
+              text(event.teacher[p], daySize * jour + first_J +Cday, dbut+Height/4 +p*14 -lengthe*7);
             }
           }
+        }
+      }
+    }
+    if (event.groupe!=null && event.groupe.length!=0 && Height>=130) {
+      lengthe=0;
+      for (int h=0; h<event.groupe.length; h++) {
+        if (event.groupe[h]!=null) {
+          lengthe++;
+        }
+      }
+      for (int h=0; h<lengthe; h++) {
+        if (TxtW+10<daySize && event.groupe[h]!=null) {
+          text(event.groupe[h], daySize * jour + first_J +Cday + h*30 -TxtW/2, Hgroupe);
+          TxtW+=textWidth(event.groupe[h]);
         }
       }
     }
