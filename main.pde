@@ -235,3 +235,17 @@ void draw() {
   
   contPanel.display();
 }
+
+void mousePressed() {
+  if (EdtWin[0].prochain.estClique(mouseX, mouseY)) {
+    DDS = addDays(DDS,7);
+    DFS = addDays(DFS,7);
+    print(DDS);
+  }
+
+  if (EdtWin[0].precedent.estClique(mouseX, mouseY)) {
+    DDS = subtractWeek(DDS);
+    DFS = subtractWeek(DFS);
+    print(DDS);
+  }
+}
