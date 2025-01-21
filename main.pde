@@ -4,8 +4,8 @@ String[] LSTPROFS;
 Event[][] LSTEVENTS;
 
 
-final int Displaywidth=1900;
-final int Displayheight=1050;
+final int Displaywidth=1440;
+final int Displayheight=900;
 PFont myFont;
 Edt[] EdtWin = new Edt[3];
 Controls contPanel;
@@ -191,8 +191,11 @@ void triEvent(Event[] tab) {
   }
 }
 
+void settings(){
+  size(Displaywidth, Displayheight);
+}
+
 void setup() {
-  size(1080, 750);
   
   LSTSALLES=initSalles("salles.csv");
   LSTSOUSGROUPES=initSousGroupes("etudiants.csv");
