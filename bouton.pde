@@ -31,6 +31,39 @@ class Bouton {
   }
 }
 
+class Bouton {
+  int x, y, sx, sy;
+  PImage icone;
+  boolean actif=false;
+  color c = color(255);
+
+  Bouton(int x, int y, int sx, int sy, String image) {
+    this.x = x;
+    this.y = y;
+    this.sx = sx;
+    this.sy = sy;
+    if (!image.equals("")) {
+      icone=loadImage(image);
+      icone.resize(sx, sy);
+    }
+  }
+
+  boolean estClique(int posX, int posY) {
+    return actif && posX > this.x && posX < this.x + this.sx && posY > this.y && posY < this.y + this.sy;
+  }
+
+  void display() {
+    fill(c);
+    if (actif) {
+      if (icone != null) {
+        image(icone, x, y);
+      } else {
+        rect(x, y, sx, sy);
+      }
+    }
+  }
+}
+
 class DropdownMenu {
   Bouton[] elem;
   String[] items;
@@ -38,6 +71,7 @@ class DropdownMenu {
   String arrowUp = "↑ ";
   String arrowDown = "↓ ";
   String tag;
+  boolean hidden = false;
   boolean isOpen = false;
   int x, y, sx, sy;
   color c = color(255);
@@ -48,6 +82,15 @@ class DropdownMenu {
     this.sx = sx;
     this.sy = sy;
     this.tag = tag;
+    this.items = items;
+    this.elem = new Bouton[items.length];
+    for (int i = 0; i < items.length; i++) {
+      elem[i] = new Bouton(x, y + (sy * (i + 1)), sx, sy, "");
+      elem[i].actif = true;
+    }
+  }
+  
+  void setItems(String[] items){
     this.items = items;
     this.elem = new Bouton[items.length];
     for (int i = 0; i < items.length; i++) {
@@ -74,31 +117,33 @@ class DropdownMenu {
   }
 
   void display() {
-    textSize(sy);
-    stroke(0);
-    strokeWeight(1);
-    fill(this.c);
-    rect(this.x, this.y, this.sx, this.sy);
-    if (isOpen) {
-      for (int i = 0; i < elem.length; i++) {
-        if (items[i].equals(selected)) {
-          stroke(0, 191, 255);
-          strokeWeight(2);
-        } else {
-          stroke(0);
-          strokeWeight(1);
+    if (!hidden) {
+      textSize(sy);
+      stroke(0);
+      strokeWeight(1);
+      fill(this.c);
+      rect(this.x, this.y, this.sx, this.sy);
+      if (isOpen) {
+        for (int i = 0; i < elem.length; i++) {
+          if (items[i].equals(selected)) {
+            stroke(0, 191, 255);
+            strokeWeight(2);
+          } else {
+            stroke(0);
+            strokeWeight(1);
+          }
+          elem[i].display();
+          fill(0);
+          text(items[i], elem[i].x + (sx / 10), elem[i].y + sy - 4);
         }
-        elem[i].display();
         fill(0);
-        text(items[i], elem[i].x + (sx / 10), elem[i].y + sy - 4);
+        text(arrowUp + tag, this.x + (sx / 10), this.y + sy - 4);
+      } else {
+        fill(0);
+        text(arrowDown + tag, this.x + (sx / 10), this.y + sy - 4);
       }
-      fill(0);
-      text(arrowUp + tag, this.x + (sx / 10), this.y + sy - 4);
-    } else {
-      fill(0);
-      text(arrowDown + tag, this.x + (sx / 10), this.y + sy - 4);
+      stroke(0);
+      strokeWeight(1);
     }
-    stroke(0);
-    strokeWeight(1);
   }
 }
