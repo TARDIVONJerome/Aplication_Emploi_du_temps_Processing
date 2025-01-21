@@ -1,4 +1,4 @@
-Salle[] LSTSALLES; //<>// //<>// //<>//
+Salle[] LSTSALLES;
 SousGroupe[] LSTSOUSGROUPES;
 String[] LSTPROFS;
 Event[][] LSTEVENTS;
