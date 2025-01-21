@@ -217,7 +217,7 @@ void setup() {
   float[] data = randomFloats(200);
   printArray(data);
   graph.setContent(data);
-  EdtWin[0] = new Edt(0, 50, 1080, 700);
+  EdtWin[0] = new Edt(0, 50, Displaywidth, Displayheight-50);
 }
 
 void draw() {
