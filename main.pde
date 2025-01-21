@@ -209,7 +209,7 @@ void setup() {
   }
   myFont = createFont("Arial", 32);
   textFont(myFont);
-  textSize(13);
+  
   contPanel = new Controls(0, 0, Displaywidth, 50);
   contPanel.statDropdown.selected = "graph";
   graph = new Graph(0, 50, 1080, 700);
@@ -222,6 +222,7 @@ void setup() {
 
 void draw() {
   background(255);
+  textSize(13);
   cooldown--;
   if (mousePressed && cooldown <= 0) {
     contPanel.clicked(mouseX, mouseY);
