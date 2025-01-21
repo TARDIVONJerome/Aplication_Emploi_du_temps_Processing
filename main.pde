@@ -248,43 +248,55 @@ void draw() {
     contPanel.clicked(mouseX, mouseY);
     cooldown = 10;
   }
+  
   if (SSTATS.equals("edt")) {
     if (!previousPanel.equals("edt")) {
-        contPanel.groupDropdown.setItems(contPanel.addGroups(LSTSOUSGROUPES));
-        contPanel.groupDropdown.tag = "Select Group";
-        contPanel.salleDropdown.hidden = false;
+      contPanel.groupDropdown.setItems(contPanel.addGroups(LSTSOUSGROUPES));
+      contPanel.groupDropdown.tag = "Select Group";
+      contPanel.salleDropdown.setItems(contPanel.addSalles(LSTSALLES));
+      contPanel.salleDropdown.tag = "Select Salle";
+      contPanel.salleDropdown.hidden = false;
     }
     EdtWin[0].display();
     previousPanel = "edt";
   } else if (SSTATS.equals("graph")) {
     if (!previousPanel.equals("graph")) {
-        contPanel.groupDropdown.setItems(graphOpt);
-        contPanel.groupDropdown.tag = "Select Graph";
-        contPanel.salleDropdown.hidden = true;
+      contPanel.groupDropdown.setItems(graphOpt);
+      contPanel.groupDropdown.tag = "Select Graph";
+      contPanel.salleDropdown.hidden = true;
     }
     if (!prevOpt.equals(contPanel.groupDropdown.selected)) {
-      if (contPanel.groupDropdown.selected.equals("Affluence à l'IUT")){
+      if (contPanel.groupDropdown.selected.equals("Affluence à l'IUT")) {
         graph.setContent(peopleOverTime(20240902, 20250902));
-      } else if (contPanel.groupDropdown.selected.equals("Affluence au RU")){
+      } else if (contPanel.groupDropdown.selected.equals("Affluence au RU")) {
         graph.setContent(affluenceRUlist(20240902, 20250902));
-      } else if (contPanel.groupDropdown.selected.equals("Examens")){
+      } else if (contPanel.groupDropdown.selected.equals("Examens")) {
         graph.setContent(examOverTime());
-      } else if (contPanel.groupDropdown.selected.equals("Random")){
-        graph.setContent(randomFloats(3));
+      } else if (contPanel.groupDropdown.selected.equals("Random")) {
+        graph.setContent(randomFloats(10));
+      } else if (contPanel.groupDropdown.selected.equals("Charge de travail")) {
+        contPanel.salleDropdown.setItems(contPanel.addGroups(LSTSOUSGROUPES));
+        contPanel.salleDropdown.tag = "Select Group";
+        contPanel.salleDropdown.hidden = false;
       }
       prevOpt = contPanel.groupDropdown.selected;
     }
     graph.display();
     previousPanel = "graph";
+    if (!contPanel.salleDropdown.selected.equals(SROOM) && contPanel.groupDropdown.selected.equals("Charge de travail")) {
+      graph.setContent(chargeOvertime(20240902, 20250902));
+    } else if (!contPanel.groupDropdown.selected.equals("Charge de travail")){
+      contPanel.salleDropdown.hidden = true;
+    }
   }
-
+  
   contPanel.display();
 }
 
 void mousePressed() {
   if (EdtWin[0].prochain.estClique(mouseX, mouseY)) {
-    DDS = addDays(DDS,7);
-    FDS = addDays(FDS,7);
+    DDS = addDays(DDS, 7);
+    FDS = addDays(FDS, 7);
     print(DDS);
   }
 

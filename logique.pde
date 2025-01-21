@@ -162,3 +162,13 @@ float[] randomFloats(int nb){
   }
   return res;
 }
+
+float[] chargeOvertime(int date1, int date2){
+  FloatList list = new FloatList();
+  while(date1 < date2){
+    
+    list.append(chargeTravail(SROOM, date1 + "T000000Z", addDays(date1, 1) + "T000000Z"));
+    date1 = addDays(date1, 1);
+  }
+  return list.toArray();
+}
