@@ -19,6 +19,13 @@ int Dat(Event event, int i, int k, boolean t) {
   return parseInt(event.timeEnd.substring(i, k));
 }
 
+String DatS(Event event, int i, int k, boolean t) {
+  if(t){
+    return event.timeStart.substring(i, k);
+  }
+    return event.timeEnd.substring(i, k);
+}
+
 int Cweek(int annee, int mois, int jour) {
   int anneeDerniersChiffres = annee % 100;
   int quartAnnee = anneeDerniersChiffres / 4;

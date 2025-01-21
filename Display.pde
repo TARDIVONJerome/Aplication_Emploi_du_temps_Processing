@@ -148,7 +148,7 @@ class Edt extends Window {
     textAlign(LEFT, LEFT);
   }
 
-  void displayhoraire(Event event, float jour, float debut, float fin) {
+     void displayhoraire(Event event, float jour, float debut, float fin) {
     textAlign(CENTER, CENTER);
     float dbut=(hourSize*(debut-800)/100)+(y+margeH+margeJS);
     float fn=(hourSize*(fin-800)/100)+(y+margeH+margeJS);
@@ -178,13 +178,13 @@ class Edt extends Window {
         TxtW-=10;
         for ( int i=0; i<event.location.length; i++) {
           if (k>5)k=5;
-          text(event.location[i], i*30+daySize * jour + first_J +Cday-k*60, fn-13);
+          text(event.location[i], i*30+daySize * jour + first_J +Cday-k*60, dbut+Height/2);
         }
       }
     }
     rectMode(CORNER);
     textAlign(LEFT, LEFT);
-    text(Hm(event)+"-->"+HmF(event), daySize * jour + first_J +5, dbut+Height);
+    text(DatS(event,9,11,true)+":"+DatS(event,11,13,true)+"-->"+DatS(event,9,11,false)+":"+DatS(event,11,13,false), daySize * jour + first_J +5, fn-10 );
   }
 
   void display() {
