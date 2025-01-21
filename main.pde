@@ -11,14 +11,15 @@ Edt[] EdtWin = new Edt[3];
 Controls contPanel;
 String SGROUPE = "";
 String SROOM = "";
-String SSTATS = "graph";
+String SSTATS = "edt";
 String[] items;
 Graph graph;
 int cooldown = 0;
 String[] JSemaine={"Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"};
 String previousPanel = "edt";
-String[] graphOpt = {"Affluence à l'IUT", "Affluence au RU", "Examens", "Random"};
+String[] graphOpt = {"Affluence à l'IUT", "Affluence au RU", "Examens", "Random", "Charge de travail"};
 String prevOpt = "";
+String prevGroup = "";
 SousGroupe[] lstTest= new SousGroupe[2];
 Event[][]  blbl;
 SousGroupe[] ltsprevgroup;
@@ -296,9 +297,6 @@ void draw() {
       contPanel.groupDropdown.setItems(graphOpt);
       contPanel.groupDropdown.tag = "Select Graph";
       contPanel.salleDropdown.hidden = true;
-      contPanel.groupCDropdown.hidden = true;
-      contPanel.groupDropdown.hidden = false;
-      contPanel.groupCDropdown.hidden = true;
     }
     if (!prevOpt.equals(contPanel.groupDropdown.selected)) {
       if (contPanel.groupDropdown.selected.equals("Affluence à l'IUT")) {
@@ -308,10 +306,21 @@ void draw() {
       } else if (contPanel.groupDropdown.selected.equals("Examens")) {
         graph.setContent(examOverTime());
       } else if (contPanel.groupDropdown.selected.equals("Random")) {
-        graph.setContent(randomFloats(3));
+        graph.setContent(randomFloats(16));
+      } else if (contPanel.groupDropdown.selected.equals("Charge de travail")) {
+        contPanel.salleDropdown.setItems(contPanel.addGroups(LSTSOUSGROUPES));
+        contPanel.salleDropdown.tag = "Select Group";
+        contPanel.salleDropdown.hidden = false;
       }
       prevOpt = contPanel.groupDropdown.selected;
     }
+    if (contPanel.groupDropdown.selected.equals("Charge de travail") && !contPanel.salleDropdown.selected.equals(prevGroup)) {
+      graph.setContent(chargeOvertime(20240902, 20250902));
+      prevGroup = contPanel.salleDropdown.selected;
+    } else if (!contPanel.groupDropdown.selected.equals("Charge de travail")) {
+      contPanel.salleDropdown.hidden = true;
+    }
+
     graph.display();
     previousPanel = "graph";
   }

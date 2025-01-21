@@ -284,11 +284,13 @@ class Graph extends Window {
   }
 
   void display() {
+    
     textSize(8);
     fill(175);
     stroke(175);
     line(this.x + this.marge, this.y + this.marge, this.x + marge, this.y + this.sy - this.marge*0.8);
     line(this.x + this.marge, this.y + this.sy - this.marge, this.x + this.sx - marge, this.y + this.sy - this.marge);
+    
     if (content != null) {
       for (int i = (int)content[min]; i < content[max]; i += Yscale) {
         line(this.x + this.marge*0.8, // X
