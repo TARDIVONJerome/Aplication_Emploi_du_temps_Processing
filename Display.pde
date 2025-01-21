@@ -274,10 +274,6 @@ class Graph extends Window {
           );
         stroke(204, 102, 0);
         fill(204, 102, 0);
-        circle(this.x + this.Xscale * i + this.marge, // X
-          (this.y + this.sy - this.marge) - (this.Yscale * (content[i] - content[min])), // Y
-          4 // R
-          );
         circle(this.x + this.Xscale * (i - 1) + this.marge, // X
           (this.y + this.sy - this.marge) - (this.Yscale * (content[i - 1] - content[min])), // Y
           4 // R
@@ -290,6 +286,12 @@ class Graph extends Window {
           this.y + this.sy - this.marge // Y
           );
       }
+      stroke(204, 102, 0);
+      fill(204, 102, 0);
+      circle(this.x + this.Xscale * (content.length - 1) + this.marge, // X
+        (this.y + this.sy - this.marge) - (this.Yscale * (content[(content.length - 1)] - content[min])), // Y
+        4 // R
+        );
     }
   }
 }
