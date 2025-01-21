@@ -88,14 +88,6 @@ class DropdownMenu {
   }
 
 
-    if (posX > this.x && posX < this.x + this.sx && posY > this.y && posY < this.y + this.sy) {
-      isOpen = !isOpen;
-      return true;
-    }
-    isOpen = false;
-    return false;
-  }
-
   void display() {
     if (!hidden) {
       textSize(sy);

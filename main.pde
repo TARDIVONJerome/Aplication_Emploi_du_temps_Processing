@@ -263,9 +263,6 @@ void draw() {
     }
     EdtWin[0].display();
     previousPanel = "EdtCommun";
-    if(containsSS(contPanel.groupCDropdown.selected, prevGroup)){
-      blbl=crenauxCommuns(groupCDropdown.selectedliste);
-    }
   }
 
   if (SSTATS.equals("EdtExam")) {
@@ -284,6 +281,8 @@ void draw() {
     if (!previousPanel.equals("edt")) {
       contPanel.groupDropdown.setItems(contPanel.addGroups(LSTSOUSGROUPES));
       contPanel.groupDropdown.tag = "Select Group";
+      contPanel.salleDropdown.setItems(contPanel.addSalles(LSTSALLES));
+      contPanel.salleDropdown.tag = "Select Salle";
       contPanel.salleDropdown.hidden = false;
       contPanel.groupDropdown.hidden = false;
       contPanel.groupCDropdown.hidden = true;
@@ -295,6 +294,7 @@ void draw() {
       contPanel.groupDropdown.setItems(graphOpt);
       contPanel.groupDropdown.tag = "Select Graph";
       contPanel.salleDropdown.hidden = true;
+      
     }
     if (!prevOpt.equals(contPanel.groupDropdown.selected)) {
       if (contPanel.groupDropdown.selected.equals("Affluence à l'IUT")) {
