@@ -162,6 +162,8 @@ class Edt extends Window {
     rect(daySize * jour + first_J, dbut, this.daySize * (jour + 1) + first_J - 10, fn, 20);
     fill(255, 255, 255);
     int k=0;
+    int p=0;
+    int i=0;
     for (int l=0; l<Height/15; l++) {
       int TxtW=0;
 
@@ -170,30 +172,31 @@ class Edt extends Window {
         if (Height>50)text(event.summary, daySize * jour + first_J +Cday, dbut+13);
         else text(event.summary, daySize * jour + first_J +Cday, dbut+Height/2);
       }
-      //else text(event.summary, ((this.x + this.sx)-ecare)/5*(x-1)+(((this.x + this.sx)-ecare)/5)/2+first_ele, (((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*(y/100-8)+((this.y + this.sy)/8+50)+(((((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*(y/100-8+(h-y)/100)+((this.y + this.sy)/8+50))-((((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*(y/100-8)+((this.y + this.sy)/8+50)))/2);
       if ( event.location.length!=0 && Height>=100) {
-        for (int i=0; i<event.location.length; i++) {
-          TxtW+=(int)textWidth(event.location[i])+10;
+        for (int j=0; j<event.location.length; j++) {
+          TxtW+=(int)textWidth(event.location[j])+10;
         }
         TxtW-=10;
-        for ( int i=0; i<event.location.length; i++) {
+        for (; i<event.location.length && i*15<Height/4; i++) {
           if (k>5)k=5;
-          text(event.location[i], i*30+daySize * jour + first_J +Cday-k*60, dbut+Height/2);
+          text(event.location[i], daySize * jour + first_J +Cday, dbut+Height/2 + i*15);
+        }
+      }
+      if (l<Height/30 && l!=1) {
+        if ( event.teacher.length!=0 && Height>=100) {
+          for (; p<event.teacher.length; p++) {
+            if (event.teacher[p]!=null) {
+              if (textWidth(event.teacher[p])+5>daySize)event.teacher[p]=event.teacher[p].substring(0, 18)+"...";
+              text(event.teacher[p], daySize * jour + first_J +Cday, dbut+Height/4 +p*14 -event.teacher.length*7);
+            }
+          }
         }
       }
     }
     rectMode(CORNER);
     textAlign(LEFT, LEFT);
-    text(DatS(event,9,11,true)+":"+DatS(event,11,13,true)+"-->"+DatS(event,9,11,false)+":"+DatS(event,11,13,false), daySize * jour + first_J +5, fn-10 );
+    text(DatS(event, 9, 11, true)+":"+DatS(event, 11, 13, true)+"-->"+DatS(event, 9, 11, false)+":"+DatS(event, 11, 13, false), daySize * jour + first_J +5, fn-10 );
   }
-
-  void display() {
-    textSize(13);
-    displayEDT();
-    displayweek();
-    displayboutons();
-  }
-}
 
 class Graph extends Window {
   int marge = 60;
