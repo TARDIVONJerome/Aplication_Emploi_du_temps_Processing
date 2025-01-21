@@ -138,3 +138,49 @@ float[] randomFloats(int nb){
   }
   return res;
 }
+
+float[] peopleOverTime(int date1, int date2){
+  FloatList list = new FloatList();
+  while(date1 < date2){
+    list.append(present(date1 + ""));
+    date1 = addDays(date1, 1);
+  }
+  
+  return list.toArray();
+}
+
+float[] affluenceRUlist(int date1, int date2){
+  FloatList list = new FloatList();
+  while(date1 < date2){
+    list.append(present(date1 + ""));
+    date1 = addDays(date1, 1);
+  }
+  
+  return list.toArray();
+}
+
+float[] examOverTime(){
+  Event[] exam = initExam()[0];
+  float[] res = new float[exam.length];
+  int k = -1;
+  String lastDate = "00000000T000000Z";
+  triEvent(exam);
+  
+  for(int i = 0; i<exam.length; i++){
+    if (!lastDate.substring(0, 8).equals(exam[i].timeStart.substring(0, 8))){
+      k++;
+      lastDate = exam[i].timeStart;
+    }
+    res[k]++;
+  }
+  
+  return res;
+}
+
+float[] randomFloats(int nb){
+  float[] res = new float[nb];
+  for (int i = 0; i < nb; i++){
+    res[i] = (int)random(0, 255);
+  }
+  return res;
+}
