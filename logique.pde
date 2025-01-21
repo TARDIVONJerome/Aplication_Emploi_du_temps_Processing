@@ -14,8 +14,9 @@ int HmF(Event event) {
   return parseInt(event.timeEnd.substring(9, 13))+decalageH;
 }
 
-int autre(Event event, int i, int k) {
-  return parseInt(event.timeStart.substring(i, k));
+int Dat(Event event, int i, int k, boolean t) {
+  if(t)return parseInt(event.timeStart.substring(i, k));
+  return parseInt(event.timeEnd.substring(i, k));
 }
 
 int Cweek(int annee, int mois, int jour) {
