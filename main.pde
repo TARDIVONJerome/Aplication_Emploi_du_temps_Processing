@@ -209,7 +209,7 @@ void setup() {
   }
   myFont = createFont("Arial", 32);
   textFont(myFont);
-  textSize(18);
+  textSize(13);
   contPanel = new Controls(0, 0, Displaywidth, 50);
   contPanel.statDropdown.selected = "graph";
   graph = new Graph(0, 50, 1080, 700);
