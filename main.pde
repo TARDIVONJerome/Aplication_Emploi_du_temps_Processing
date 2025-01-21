@@ -222,7 +222,6 @@ void setup() {
 
 void draw() {
   background(255);
-  textSize(13);
   cooldown--;
   if (mousePressed && cooldown <= 0) {
     contPanel.clicked(mouseX, mouseY);

@@ -187,6 +187,7 @@ class Edt extends Window {
   }
 
   void display() {
+    textSize(13);
     displayEDT();
     displayweek();
     displayboutons();
