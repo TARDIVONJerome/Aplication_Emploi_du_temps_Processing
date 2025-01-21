@@ -1,9 +1,35 @@
-PFont myFont;
-Salle[] LSTSALLES;
+Salle[] LSTSALLES; //<>// //<>//
 SousGroupe[] LSTSOUSGROUPES;
 String[] LSTPROFS;
-Event[] LSTEVENTS;
+Event[][] LSTEVENTS;
 
+
+final int Displaywidth=1440;
+final int Displayheight=900;
+PFont myFont;
+Edt[] EdtWin = new Edt[3];
+Controls contPanel;
+String SGROUPE = "";
+String SROOM = "";
+String SSTATS = "graph";
+String[] items;
+Graph graph;
+int cooldown = 0;
+String[] JSemaine={"Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"};
+String previousPanel = "edt";
+String[] graphOpt = {"Affluence à l'IUT", "Affluence au RU", "Examens", "Random"};
+String prevOpt = "";
+SousGroupe[] lstTest= new SousGroupe[2];
+Event[][]  blbl;
+SousGroupe[] ltsprevgroup;
+
+
+int nbH=12;
+int annee = year();
+int mois = month();
+int jour = day();
+int DDS =annee*10000+mois*100+jour-Cweek(annee, mois, jour);
+int FDS =DDS+6;
 
 boolean compTime(String time1, String time2) {
   time1 = time1.substring(0, 15);
@@ -21,6 +47,23 @@ boolean compTime(String time1, String time2) {
     return true;
   } else {
     return false;
+  }
+}
+
+void DecalageH() {
+  for (int u=0; u<LSTEVENTS.length; u++) {
+    if (LSTEVENTS[u]!=null) {
+      for (int i=LSTEVENTS[u].length-1; i>=0; i--) {
+        if (LSTEVENTS[u][i]!=null && LSTEVENTS[u][i].timeStart!=null &&  LSTEVENTS[u][i].timeEnd!=null) {
+          int decalageH=1;
+          if (20241026>AMJ(LSTEVENTS[u][i]))decalageH+=decalageH;
+          if (parseInt(LSTEVENTS[u][i].timeStart.substring(9, 11))+decalageH<10)LSTEVENTS[u][i].timeStart=LSTEVENTS[u][i].timeStart.substring(0, 9)+"0"+(parseInt(LSTEVENTS[u][i].timeStart.substring(9, 11))+decalageH)+LSTEVENTS[u][i].timeStart.substring(11, 16);
+          else LSTEVENTS[u][i].timeStart=LSTEVENTS[u][i].timeStart.substring(0, 9)+(parseInt(LSTEVENTS[u][i].timeStart.substring(9, 11))+decalageH)+LSTEVENTS[u][i].timeStart.substring(11, 16);
+          if (parseInt(LSTEVENTS[u][i].timeEnd.substring(9, 11))+decalageH<10)LSTEVENTS[u][i].timeEnd=LSTEVENTS[u][i].timeEnd.substring(0, 9)+"0"+(parseInt(LSTEVENTS[u][i].timeEnd.substring(9, 11))+decalageH)+LSTEVENTS[u][i].timeEnd.substring(11, 16);
+          else LSTEVENTS[u][i].timeEnd=LSTEVENTS[u][i].timeEnd.substring(0, 9)+(parseInt(LSTEVENTS[u][i].timeEnd.substring(9, 11))+decalageH)+LSTEVENTS[u][i].timeEnd.substring(11, 16);
+        }
+      }
+    }
   }
 }
 
@@ -44,9 +87,15 @@ Event[] initEvents(String path) {
     } else if (tmp[0].equals("SUMMARY")) {
       toPush.summary = tmp[1];
     } else if (tmp[0].equals("LOCATION")) {
-      try{
-      toPush.location = tmp[1].split("\\\\,");
-      } catch (ArrayIndexOutOfBoundsException e){
+      try {
+        DescTmp[0] = lines[i].substring(1);
+        if (lines[i + 1].charAt(0) == ' ') {
+          DescTmp[0] += lines[i + 1].substring(1);
+          i++;
+        }
+        toPush.location = DescTmp[0].split(":")[1].split("\\\\,");
+      }
+      catch (ArrayIndexOutOfBoundsException e) {
         toPush.location = new String[0];
       }
     } else if (tmp[0].equals("DESCRIPTION")) {
@@ -165,30 +214,121 @@ void triEvent(Event[] tab) {
   }
 }
 
-
 void settings() {
   size(Displaywidth, Displayheight);
 }
 
 void setup() {
-  myFont = createFont("Arial", 32);  // Charger la police une seule fois
-  textFont(myFont);
+
   LSTSALLES=initSalles("salles.csv");
   LSTSOUSGROUPES=initSousGroupes("etudiants.csv");
   LSTPROFS=initProfs("enseignants.csv");
   String[] files={"INFO-BUT1-S1.ics", "INFO-BUT2-S3.ics", "INFO-BUT3-S5.ics", "INFO-LP-ESSIR.ics"};
-  
-  
-  Event[][] LSTEVENTS=new Event[files.length][];
+  LSTEVENTS=new Event[files.length][];
   for (int i=0; i<LSTEVENTS.length; i++) {
     LSTEVENTS[i]=delNull(initEvents(files[i]));
     triEvent(LSTEVENTS[i]);
   }
-
-
-
-  initDisplay();
-  rectMode(CORNERS);
+  DecalageH();
+  myFont = createFont("Arial", 32);
+  textFont(myFont);
+  textSize(18);
+  contPanel = new Controls(0, 0, Displaywidth, 50);
+  contPanel.statDropdown.selected = "edt";
+  graph = new Graph(0, 50, Displaywidth, Displayheight - 50);
+  //float[] data = examOverTime();
+  //float[] data = affluenceRUlist(20240902, 20250902);
+  //float[] data = peopleOverTime(20240902, 20250902);
+  float[] data = randomFloats(3);
+  graph.setContent(data);
+  EdtWin[0] = new Edt(0, 50, Displaywidth, Displayheight - 50);
+  lstTest[0]=LSTSOUSGROUPES[0];
+  lstTest[1]=LSTSOUSGROUPES[2];
+  blbl=crenauxCommuns(lstTest);
 }
 
-//AAAAMMDD"t"HHMMSS"z"
+void draw() {
+  background(255);
+  cooldown--;
+  if (mousePressed && cooldown <= 0) {
+    contPanel.clicked(mouseX, mouseY);
+    cooldown = 10;
+  }
+  if (SSTATS.equals("EdtCommun")) {
+    if (!previousPanel.equals("EdtCommun")) {
+      contPanel.groupDropdown.setItems(contPanel.addGroups(LSTSOUSGROUPES));
+      contPanel.groupDropdown.tag = "Select Group";
+      contPanel.salleDropdown.hidden = true;
+      contPanel.groupCDropdown.hidden = false;
+      contPanel.groupDropdown.hidden = true;
+    }
+    EdtWin[0].display();
+    previousPanel = "EdtCommun";
+    if(containsSS(contPanel.groupCDropdown.selected, prevGroup)){
+      blbl=crenauxCommuns(groupCDropdown.selectedliste);
+    }
+  }
+
+  if (SSTATS.equals("EdtExam")) {
+    if (!previousPanel.equals("EdtExam")) {
+      contPanel.groupDropdown.setItems(contPanel.addGroups(LSTSOUSGROUPES));
+      contPanel.groupDropdown.tag = "Select Group";
+      contPanel.salleDropdown.hidden = true;
+      contPanel.groupDropdown.hidden = false;
+      contPanel.groupCDropdown.hidden = true;
+    }
+    EdtWin[0].display();
+    previousPanel = "EdtExam";
+  }
+
+  if (SSTATS.equals("edt") ) {
+    if (!previousPanel.equals("edt")) {
+      contPanel.groupDropdown.setItems(contPanel.addGroups(LSTSOUSGROUPES));
+      contPanel.groupDropdown.tag = "Select Group";
+      contPanel.salleDropdown.hidden = false;
+      contPanel.groupDropdown.hidden = false;
+      contPanel.groupCDropdown.hidden = true;
+    }
+    EdtWin[0].display();
+    previousPanel = "edt";
+  } else if (SSTATS.equals("graph")) {
+    if (!previousPanel.equals("graph")) {
+      contPanel.groupDropdown.setItems(graphOpt);
+      contPanel.groupDropdown.tag = "Select Graph";
+      contPanel.salleDropdown.hidden = true;
+      contPanel.groupCDropdown.hidden = true;
+      contPanel.groupDropdown.hidden = false;
+      contPanel.groupCDropdown.hidden = true;
+    }
+    if (!prevOpt.equals(contPanel.groupDropdown.selected)) {
+      if (contPanel.groupDropdown.selected.equals("Affluence à l'IUT")) {
+        graph.setContent(peopleOverTime(20240902, 20250902));
+      } else if (contPanel.groupDropdown.selected.equals("Affluence au RU")) {
+        graph.setContent(affluenceRUlist(20240902, 20250902));
+      } else if (contPanel.groupDropdown.selected.equals("Examens")) {
+        graph.setContent(examOverTime());
+      } else if (contPanel.groupDropdown.selected.equals("Random")) {
+        graph.setContent(randomFloats(3));
+      }
+      prevOpt = contPanel.groupDropdown.selected;
+    }
+    graph.display();
+    previousPanel = "graph";
+  }
+
+  contPanel.display();
+}
+
+void mousePressed() {
+  if (EdtWin[0].prochain.estClique(mouseX, mouseY)) {
+    DDS = addDays(DDS, 7);
+    FDS = addDays(FDS, 7);
+    print(DDS);
+  }
+
+  if (EdtWin[0].precedent.estClique(mouseX, mouseY)) {
+    DDS = subtractWeek(DDS);
+    FDS = subtractWeek(FDS);
+    print(DDS);
+  }
+}
