@@ -208,6 +208,13 @@ void setup() {
     triEvent(LSTEVENTS[i]);
   }
   
+  
+
+  initDisplay();
+  rectMode(CORNERS);
+
+  /*vérification et test des fonctions*/
+  
   //int tt = 0; //<>//
   //for (int i=0; i<LSTSALLES.length; i++) {
   //  println("Salle " + LSTSALLES[i].nom + " : " + roomOccupation(LSTSALLES[i].nom, "00000000T000000Z", "99999999T999999Z", 0) + "%");
@@ -215,9 +222,10 @@ void setup() {
   //}
   //println("Utilisation tt : " + tt + "%");
 
-  initDisplay();
-  rectMode(CORNERS);
   //println(present(LSTEVENTS[0][700].timeStart.substring(0,8)));
   //println(affluenceRU(LSTEVENTS[0][700].timeStart.substring(0,8)));
   //println(chargeTravail(LSTSOUSGROUPES[3],"20240000T000000Z","20260000T000000Z"));
+  //SousGroupe[] lstTest={LSTSOUSGROUPES[0],LSTSOUSGROUPES[2]};
+  //crenauxCommuns(lstTest);
+  //println("20250120T083000Z".substring(0,16));
 }
