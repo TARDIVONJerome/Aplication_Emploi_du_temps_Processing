@@ -98,19 +98,6 @@ class Edt extends Window {
     precedent.display();
   }
 
-  /*
-  void displayheure() {
-   fill(0, 0, 0);
-   for (int i=0; i<nbH; i++) {
-   if (i!=nbH-1) {
-   text(8+i+":00", 70, (((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*i+((this.y + this.sy)/8+50));
-   for (int y=1; y<51; y++) {
-   if (y%2==0)line(((this.x + this.sx)-ecare)/50*(y-1)+first_ele-15, (((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*i+((this.y + this.sy)/8+50), ((this.x + this.sx)-ecare)/50*y+first_ele-15, (((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*i+((this.y + this.sy)/8+50));
-   }
-   } else text(">"+(8+i)+":00", 70, (((this.y + this.sy)-20)-((this.y + this.sy)/8+50))/(nbH-1)*i+((this.y + this.sy)/8+50));
-   }
-   }
-   */
   void displayEDT() {
 
 
@@ -121,7 +108,8 @@ class Edt extends Window {
       fill(255);
       rect(daySize*i+first_J, y+margeH, daySize*(i+1)+first_J-10, Edtheight-margeH);
       fill(0);
-      text(JSemaine[i], daySize*i+Cday+first_J, y+margeJS/2+margeH);
+      if((FDS-(7-i))%100<=0)text(JSemaine[i]+(DDS+i), daySize*i+Cday+first_J, y+margeJS/2+margeH);
+      else text(JSemaine[i]+(FDS-(7-i)), daySize*i+Cday+first_J, y+margeJS/2+margeH);
     }
     rectMode(CORNER);
     textAlign(RIGHT, CENTER);
@@ -140,15 +128,33 @@ class Edt extends Window {
   void displayweek() {
     for (int u=0; u<LSTEVENTS.length; u++) {
       for (int i=LSTEVENTS[u].length-1; i>0; i--) {
-        if (DDS<=AMJ(LSTEVENTS[u][i]) && DFS>AMJ(LSTEVENTS[u][i]) && (contains(LSTEVENTS[u][i].groupe, SGROUPE ) || contains(LSTEVENTS[u][i].location, SROOM ))) {
-          displayhoraire(LSTEVENTS[u][i], Cweek(Dat(LSTEVENTS[u][i], 0, 4,true), Dat(LSTEVENTS[u][i], 4, 6,true), Dat(LSTEVENTS[u][i], 6, 8,true)), Hm(LSTEVENTS[u][i]), HmF(LSTEVENTS[u][i]));
+        if (DDS<=AMJ(LSTEVENTS[u][i]) && FDS>AMJ(LSTEVENTS[u][i]) && (contains(LSTEVENTS[u][i].groupe, SGROUPE ) || contains(LSTEVENTS[u][i].location, SROOM ))) {
+          displayhoraire(LSTEVENTS[u][i], Cweek(Dat(LSTEVENTS[u][i], 0, 4, true), Dat(LSTEVENTS[u][i], 4, 6, true), Dat(LSTEVENTS[u][i], 6, 8, true)), Hm(LSTEVENTS[u][i]), HmF(LSTEVENTS[u][i]));
         }
       }
     }
     textAlign(LEFT, LEFT);
+    
+    //    for (int u=0; u<blbl.length; u++) {
+    //  for (int i=blbl[u].length-1; i>0; i--) {
+    //    if (DDS<=AMJ(blbl[u][i]) && FDS>AMJ(blbl[u][i]) && (contains(blbl[u][i].groupe, SGROUPE ) || contains(blbl[u][i].location, SROOM ))) {
+    //      displayhoraire(blbl[u][i], Cweek(Dat(blbl[u][i], 0, 4, true), Dat(blbl[u][i], 4, 6, true), Dat(blbl[u][i], 6, 8, true)), Hm(blbl[u][i]), HmF(blbl[u][i]));
+    //    }
+    //  }
+    //}
+    textAlign(LEFT, LEFT);
+    
+    //for (int u=0; u<initExam().length; u++) {
+    //  for (int i=initExam()[u].length-1; i>0; i--) {
+    //    if (DDS<=AMJ(initExam()[u][i]) && FDS>AMJ(initExam()[u][i]) && (contains(initExam()[u][i].groupe, SGROUPE ) || contains(initExam()[u][i].location, SROOM ))) {
+    //      displayhoraire(initExam()[u][i], Cweek(Dat(initExam()[u][i], 0, 4, true), Dat(initExam()[u][i], 4, 6, true), Dat(initExam()[u][i], 6, 8, true)), Hm(initExam()[u][i]), HmF(initExam()[u][i]));
+    //    }
+    //  }
+    //}
+    //textAlign(LEFT, LEFT);
   }
 
-     void displayhoraire(Event event, float jour, float debut, float fin) {
+  void displayhoraire(Event event, float jour, float debut, float fin) {
     textAlign(CENTER, CENTER);
     float dbut=(hourSize*(debut-800)/100)+(y+margeH+margeJS);
     float fn=(hourSize*(fin-800)/100)+(y+margeH+margeJS);
