@@ -15,6 +15,7 @@ String SSTATS = "graph";
 String[] items;
 Graph graph;
 int cooldown = 0;
+String[] JSemaine={"Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"};
 
 
 
