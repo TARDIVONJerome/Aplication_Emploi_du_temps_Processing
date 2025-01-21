@@ -195,7 +195,7 @@ class Edt extends Window {
       }
       if (l<Height/30 && l!=1) {
         if ( event.teacher.length!=0 && Height>=100) {
-          for (; p<event.teacher.length; p++) {
+          for (; p<event.teacher.length && p*15<Height/4; p++) {
             if (event.teacher[p]!=null) {
               if (textWidth(event.teacher[p])+5>daySize)event.teacher[p]=event.teacher[p].substring(0, 18)+"...";
               text(event.teacher[p], daySize * jour + first_J +Cday, dbut+Height/4 +p*14 -event.teacher.length*7);
