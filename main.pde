@@ -1,4 +1,4 @@
-Salle[] LSTSALLES; //<>//
+Salle[] LSTSALLES; //<>// //<>//
 SousGroupe[] LSTSOUSGROUPES;
 String[] LSTPROFS;
 Event[][] LSTEVENTS;
@@ -11,15 +11,17 @@ Edt[] EdtWin = new Edt[3];
 Controls contPanel;
 String SGROUPE = "";
 String SROOM = "";
-String SSTATS = "edt";
+String SSTATS = "graph";
 String[] items;
 Graph graph;
 int cooldown = 0;
 String[] JSemaine={"Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"};
 String previousPanel = "edt";
-String[] graphOpt = {"Affluence à l'IUT", "Affluence au RU", "Examens", "Random", "Charge de travail"};
+String[] graphOpt = {"Affluence à l'IUT", "Affluence au RU", "Examens", "Random"};
 String prevOpt = "";
-String prevGroup = "";
+SousGroupe[] lstTest= new SousGroupe[2];
+Event[][]  blbl;
+SousGroupe[] ltsprevgroup;
 
 
 int nbH=12;
@@ -227,13 +229,22 @@ void setup() {
     LSTEVENTS[i]=delNull(initEvents(files[i]));
     triEvent(LSTEVENTS[i]);
   }
+  DecalageH();
   myFont = createFont("Arial", 32);
   textFont(myFont);
   textSize(18);
   contPanel = new Controls(0, 0, Displaywidth, 50);
   contPanel.statDropdown.selected = "edt";
   graph = new Graph(0, 50, Displaywidth, Displayheight - 50);
+  //float[] data = examOverTime();
+  //float[] data = affluenceRUlist(20240902, 20250902);
+  //float[] data = peopleOverTime(20240902, 20250902);
+  float[] data = randomFloats(3);
+  graph.setContent(data);
   EdtWin[0] = new Edt(0, 50, Displaywidth, Displayheight - 50);
+  lstTest[0]=LSTSOUSGROUPES[0];
+  lstTest[1]=LSTSOUSGROUPES[2];
+  blbl=crenauxCommuns(lstTest);
 }
 
 void draw() {
@@ -243,14 +254,40 @@ void draw() {
     contPanel.clicked(mouseX, mouseY);
     cooldown = 10;
   }
+  if (SSTATS.equals("EdtCommun")) {
+    if (!previousPanel.equals("EdtCommun")) {
+      contPanel.groupDropdown.setItems(contPanel.addGroups(LSTSOUSGROUPES));
+      contPanel.groupDropdown.tag = "Select Group";
+      contPanel.salleDropdown.hidden = true;
+      contPanel.groupCDropdown.hidden = false;
+      contPanel.groupDropdown.hidden = true;
+    }
+    EdtWin[0].display();
+    previousPanel = "EdtCommun";
+    if(containsSS(contPanel.groupCDropdown.selected, prevGroup)){
+      blbl=crenauxCommuns(groupCDropdown.selectedliste);
+    }
+  }
 
-  if (SSTATS.equals("edt")) {
+  if (SSTATS.equals("EdtExam")) {
+    if (!previousPanel.equals("EdtExam")) {
+      contPanel.groupDropdown.setItems(contPanel.addGroups(LSTSOUSGROUPES));
+      contPanel.groupDropdown.tag = "Select Group";
+      contPanel.salleDropdown.hidden = true;
+      contPanel.groupDropdown.hidden = false;
+      contPanel.groupCDropdown.hidden = true;
+    }
+    EdtWin[0].display();
+    previousPanel = "EdtExam";
+  }
+
+  if (SSTATS.equals("edt") ) {
     if (!previousPanel.equals("edt")) {
       contPanel.groupDropdown.setItems(contPanel.addGroups(LSTSOUSGROUPES));
       contPanel.groupDropdown.tag = "Select Group";
-      contPanel.salleDropdown.setItems(contPanel.addSalles(LSTSALLES));
-      contPanel.salleDropdown.tag = "Select Salle";
       contPanel.salleDropdown.hidden = false;
+      contPanel.groupDropdown.hidden = false;
+      contPanel.groupCDropdown.hidden = true;
     }
     EdtWin[0].display();
     previousPanel = "edt";
@@ -259,6 +296,9 @@ void draw() {
       contPanel.groupDropdown.setItems(graphOpt);
       contPanel.groupDropdown.tag = "Select Graph";
       contPanel.salleDropdown.hidden = true;
+      contPanel.groupCDropdown.hidden = true;
+      contPanel.groupDropdown.hidden = false;
+      contPanel.groupCDropdown.hidden = true;
     }
     if (!prevOpt.equals(contPanel.groupDropdown.selected)) {
       if (contPanel.groupDropdown.selected.equals("Affluence à l'IUT")) {
@@ -268,21 +308,10 @@ void draw() {
       } else if (contPanel.groupDropdown.selected.equals("Examens")) {
         graph.setContent(examOverTime());
       } else if (contPanel.groupDropdown.selected.equals("Random")) {
-        graph.setContent(randomFloats(16));
-      } else if (contPanel.groupDropdown.selected.equals("Charge de travail")) {
-        contPanel.salleDropdown.setItems(contPanel.addGroups(LSTSOUSGROUPES));
-        contPanel.salleDropdown.tag = "Select Group";
-        contPanel.salleDropdown.hidden = false;
+        graph.setContent(randomFloats(3));
       }
       prevOpt = contPanel.groupDropdown.selected;
     }
-    if (contPanel.groupDropdown.selected.equals("Charge de travail") && !contPanel.salleDropdown.selected.equals(prevGroup)) {
-      graph.setContent(chargeOvertime(20240902, 20250902));
-      prevGroup = contPanel.salleDropdown.selected;
-    } else if (!contPanel.groupDropdown.selected.equals("Charge de travail")) {
-      contPanel.salleDropdown.hidden = true;
-    }
-    
     graph.display();
     previousPanel = "graph";
   }
@@ -294,10 +323,12 @@ void mousePressed() {
   if (EdtWin[0].prochain.estClique(mouseX, mouseY)) {
     DDS = addDays(DDS, 7);
     FDS = addDays(FDS, 7);
+    print(DDS);
   }
 
   if (EdtWin[0].precedent.estClique(mouseX, mouseY)) {
     DDS = subtractWeek(DDS);
     FDS = subtractWeek(FDS);
+    print(DDS);
   }
 }

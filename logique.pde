@@ -61,6 +61,15 @@ boolean contains(String[] array, String str) {
   return false;
 }
 
+boolean containsSS(SousGroupe[] array, String str) {
+  for (int i = 0; i < array.length; i++) {
+    if (array[i]!=null && array[i].nomSsGroupe!=null  && str!=null && (str.contains(array[i].nomSsGroupe) || (array[i].nomSsGroupe.equals("Mobile") && (str.equals("Mob.1")|| str.equals("Mob.2"))))) {
+      return true;
+    }
+  }
+  return false;
+}
+
 int addDays(int date, int days) {
   int year = date / 10000;
   int month = (date / 100) % 100;
@@ -130,7 +139,7 @@ float[] peopleOverTime(int date1, int date2){
 float[] affluenceRUlist(int date1, int date2){
   FloatList list = new FloatList();
   while(date1 < date2){
-    list.append(affluenceRU(date1 + ""));
+    list.append(present(date1 + ""));
     date1 = addDays(date1, 1);
   }
   
@@ -158,18 +167,7 @@ float[] examOverTime(){
 float[] randomFloats(int nb){
   float[] res = new float[nb];
   for (int i = 0; i < nb; i++){
-    res[i] = (int)random(64, 128);
+    res[i] = (int)random(0, 255);
   }
   return res;
-}
-
-
-float[] chargeOvertime(int date1, int date2){
-  FloatList list = new FloatList();
-  while(date1 < date2){
-    
-    list.append(chargeTravail(SROOM, date1 + "T000000Z", addDays(date1, 1) + "T000000Z")/24.0);
-    date1 = addDays(date1, 7);
-  }
-  return list.toArray();
 }

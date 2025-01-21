@@ -1,4 +1,4 @@
-class Window {
+class Window { //<>//
   float x, y, sx, sy;
   float vx = 0;
   float vy = 0;
@@ -141,12 +141,16 @@ class Edt extends Window {
     textAlign(LEFT, LEFT);
   }
   void displayEdtCommun() {
-    for (int u=0; u<blbl.length; u++) {
-      for (int i=blbl[u].length-1; i>0; i--) {
-        if (DDS<=AMJ(blbl[u][i]) && FDS>AMJ(blbl[u][i]) && (contains(blbl[u][i].groupe, SGROUPE ) || contains(blbl[u][i].location, SROOM ))) {
-          displayhoraire(blbl[u][i], Cweek(Dat(blbl[u][i], 0, 4, true), Dat(blbl[u][i], 4, 6, true), Dat(blbl[u][i], 6, 8, true)), Hm(blbl[u][i]), HmF(blbl[u][i]));
+    try {
+      for (int u=0; blbl!=null && u<blbl.length; u++) {
+        for (int i=blbl[u].length-1; i>0; i--) {
+          if (DDS<=AMJ(blbl[u][i]) && FDS>AMJ(blbl[u][i]) && (contains(blbl[u][i].groupe, SGROUPE ) || contains(blbl[u][i].location, SROOM ))) {
+            displayhoraire(blbl[u][i], Cweek(Dat(blbl[u][i], 0, 4, true), Dat(blbl[u][i], 4, 6, true), Dat(blbl[u][i], 6, 8, true)), Hm(blbl[u][i]), HmF(blbl[u][i]));
+          }
         }
       }
+    }
+    catch (NullPointerException e) {
     }
 
     textAlign(LEFT, LEFT);
@@ -280,13 +284,11 @@ class Graph extends Window {
   }
 
   void display() {
-    
     textSize(8);
     fill(175);
     stroke(175);
     line(this.x + this.marge, this.y + this.marge, this.x + marge, this.y + this.sy - this.marge*0.8);
     line(this.x + this.marge, this.y + this.sy - this.marge, this.x + this.sx - marge, this.y + this.sy - this.marge);
-    
     if (content != null) {
       for (int i = (int)content[min]; i < content[max]; i += Yscale) {
         line(this.x + this.marge*0.8, // X
@@ -346,13 +348,15 @@ class Graph extends Window {
 
 class Controls extends Window {
   DropdownMenu groupDropdown;
+  DropdownMenu groupCDropdown;
   DropdownMenu salleDropdown;
   DropdownMenu statDropdown;
+
   int marge = 10;
 
   Controls(int x, int y, int sx, int sy) {
     super(x, y, sx, sy);
-    
+
     groupDropdown = new DropdownMenu((int)x + marge,
       (int)y + 10,
       (int)(x + sx)/3 - marge,
@@ -372,7 +376,14 @@ class Controls extends Window {
       (int)(x + sx)/3 - marge,
       (int)(y + sy)/2,
       "Select Stats",
-      addStats(new String[]{"edt", "graph"}));
+      addStats(new String[]{"edt", "EdtExam", "EdtCommun", "graph"}));
+
+    groupCDropdown = new DropdownMenu((int)x + (x + sx)/3,
+      (int)y + 10,
+      (int)(x + sx)/3 - marge,
+      (int)(y + sy)/2,
+      "Select Groupes",
+      addGroups(LSTSOUSGROUPES));
   }
 
   void clicked(int ex, int ey) {
@@ -383,11 +394,19 @@ class Controls extends Window {
     if (salleDropdown.estClique(ex, ey)) {
       SROOM = salleDropdown.selected;
       SGROUPE = "";
+      print("aa");
     }
     if (statDropdown.estClique(ex, ey)) {
       SSTATS = statDropdown.selected;
       SGROUPE = "";
       SROOM = "";
+    }
+    if (groupCDropdown.estClique2(ex, ey)) {
+      SGROUPE = groupCDropdown.selected;
+      SROOM = "";
+    // if(groupCDropdown.isOpen)
+    //  //
+      
     }
   }
 
@@ -421,5 +440,6 @@ class Controls extends Window {
     groupDropdown.display();
     salleDropdown.display();
     statDropdown.display();
+    groupCDropdown.display();
   }
 }

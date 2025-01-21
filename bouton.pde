@@ -35,6 +35,7 @@ class DropdownMenu {
   Bouton[] elem;
   String[] items;
   String selected = "";
+  SousGroupe[] selectedliste = new SousGroupe[LSTSOUSGROUPES.length];
   String arrowUp = "↑ ";
   String arrowDown = "↓ ";
   String tag;
@@ -55,9 +56,12 @@ class DropdownMenu {
       elem[i] = new Bouton(x, y + (sy * (i + 1)), sx, sy, "");
       elem[i].actif = true;
     }
+    for (int i = 0; i < selectedliste.length; i++) {
+      selectedliste[i]= new SousGroupe();
+    }
   }
-  
-  void setItems(String[] items){
+
+  void setItems(String[] items) {
     this.items = items;
     this.elem = new Bouton[items.length];
     for (int i = 0; i < items.length; i++) {
@@ -67,11 +71,38 @@ class DropdownMenu {
   }
 
   boolean estClique(int posX, int posY) {
-    if (isOpen) {
+    if (isOpen && !hidden) {
       for (int i = 0; i < elem.length; i++) {
         if (elem[i].estClique(posX, posY)) {
           selected = items[i];
           return true;
+        }
+      }
+    }
+    if (posX > this.x && posX < this.x + this.sx && posY > this.y && posY < this.y + this.sy) {
+      isOpen = !isOpen;
+      return true;
+    }
+    isOpen = false;
+    return false;
+  }
+
+  boolean estClique2(int posX, int posY) {
+    printArray(items);
+    if (isOpen && !hidden) {
+      for (int i = 0; i < elem.length; i++) {
+        if (elem[i].estClique(posX, posY)) {
+          for (int k = 0; k < selectedliste.length; k++) {
+            if (selectedliste[k]==null || selectedliste[k].nomSsGroupe.equals(items[i])) {
+              if (selectedliste[k].nomSsGroupe != null) selectedliste[k]=new SousGroupe();
+              else {
+                selectedliste[k]= new SousGroupe();
+                selectedliste[k].nomSsGroupe = items[i];
+                print(selectedliste[k].nomSsGroupe, items[i] );
+              }
+              return true;
+            }
+          }
         }
       }
     }
@@ -92,7 +123,7 @@ class DropdownMenu {
       rect(this.x, this.y, this.sx, this.sy);
       if (isOpen) {
         for (int i = 0; i < elem.length; i++) {
-          if (items[i].equals(selected)) {
+          if (items[i].equals(selected) || containsSS(selectedliste, items[i])) {
             stroke(0, 191, 255);
             strokeWeight(2);
           } else {
