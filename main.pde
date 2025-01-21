@@ -273,7 +273,7 @@ void draw() {
       } else if (contPanel.groupDropdown.selected.equals("Examens")) {
         graph.setContent(examOverTime());
       } else if (contPanel.groupDropdown.selected.equals("Random")) {
-        graph.setContent(randomFloats(100));
+        graph.setContent(randomFloats(10));
       } else if (contPanel.groupDropdown.selected.equals("Charge de travail")) {
         contPanel.salleDropdown.setItems(contPanel.addGroups(LSTSOUSGROUPES));
         contPanel.salleDropdown.tag = "Select Group";
