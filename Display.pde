@@ -403,12 +403,10 @@ class Controls extends Window {
       SGROUPE = "";
       SROOM = "";
     }
-    if (groupCDropdown.estClique2(ex, ey)) {
+    if (groupCDropdown.estClique(ex, ey)) {
       SGROUPE = groupCDropdown.selected;
       SROOM = "";
-    // if(groupCDropdown.isOpen)
-    //  //
-      
+
     }
   }
 

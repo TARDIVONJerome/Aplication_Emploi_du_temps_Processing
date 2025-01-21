@@ -87,25 +87,7 @@ class DropdownMenu {
     return false;
   }
 
-  boolean estClique2(int posX, int posY) {
-    printArray(items);
-    if (isOpen && !hidden) {
-      for (int i = 0; i < elem.length; i++) {
-        if (elem[i].estClique(posX, posY)) {
-          for (int k = 0; k < selectedliste.length; k++) {
-            if (selectedliste[k]==null || selectedliste[k].nomSsGroupe.equals(items[i])) {
-              if (selectedliste[k].nomSsGroupe != null) selectedliste[k]=new SousGroupe();
-              else {
-                selectedliste[k]= new SousGroupe();
-                selectedliste[k].nomSsGroupe = items[i];
-                print(selectedliste[k].nomSsGroupe, items[i] );
-              }
-              return true;
-            }
-          }
-        }
-      }
-    }
+
     if (posX > this.x && posX < this.x + this.sx && posY > this.y && posY < this.y + this.sy) {
       isOpen = !isOpen;
       return true;
