@@ -1,4 +1,4 @@
-int present(String date) { //<>// //<>// //<>// //<>//
+int present(String date) {
   int cpt = 0;
   SousGroupe[] tab=new SousGroupe[LSTSOUSGROUPES.length];
   arrayCopy(LSTSOUSGROUPES, tab);
