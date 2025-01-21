@@ -31,39 +31,6 @@ class Bouton {
   }
 }
 
-class Bouton {
-  int x, y, sx, sy;
-  PImage icone;
-  boolean actif=false;
-  color c = color(255);
-
-  Bouton(int x, int y, int sx, int sy, String image) {
-    this.x = x;
-    this.y = y;
-    this.sx = sx;
-    this.sy = sy;
-    if (!image.equals("")) {
-      icone=loadImage(image);
-      icone.resize(sx, sy);
-    }
-  }
-
-  boolean estClique(int posX, int posY) {
-    return actif && posX > this.x && posX < this.x + this.sx && posY > this.y && posY < this.y + this.sy;
-  }
-
-  void display() {
-    fill(c);
-    if (actif) {
-      if (icone != null) {
-        image(icone, x, y);
-      } else {
-        rect(x, y, sx, sy);
-      }
-    }
-  }
-}
-
 class DropdownMenu {
   Bouton[] elem;
   String[] items;
