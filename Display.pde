@@ -235,41 +235,53 @@ class Graph extends Window {
 
   void display() {
     textSize(8);
-    line(this.x + this.marge, this.y + this.marge, this.x + marge, this.y + this.sy - this.marge/2);
+    fill(175);
+    stroke(175);
+    line(this.x + this.marge, this.y + this.marge, this.x + marge, this.y + this.sy - this.marge*0.8);
     line(this.x + this.marge, this.y + this.sy - this.marge, this.x + this.sx - marge, this.y + this.sy - this.marge);
     if (content != null) {
       for (int i = (int)content[min]; i < content[max]; i += Yscale) {
-        line(this.x + this.marge/2, // X
-          (this.y + this.sy) - (this.y + this.Yscale * (i - content[min]) + this.Yscale * 2), // Y
+        line(this.x + this.marge*0.8, // X
+          (this.y + this.sy - this.marge) - (this.Yscale * (i - content[min])), // Y
           this.x + this.marge, // X
-          (this.y + this.sy) - (this.y + this.Yscale * (i - content[min]) + this.Yscale * 2) // Y
+          (this.y + this.sy - this.marge) - (this.Yscale * (i - content[min])) // Y
           );
 
         text(i,
           this.x + this.marge/4,
-          (this.y + this.sy) - (this.y + this.Yscale * (i - content[min]) + this.Yscale * 2) + 3
+          (this.y + this.sy - this.marge) - (this.Yscale * (i - content[min])) + 3
           );
       }
-
+      textSize(12);
+      text("Valeur max.:" + round(content[max]),
+        this.x + this.marge/4,
+        this.y + this.marge/2
+        );
+      stroke(204, 102, 0);
+      fill(204, 102, 0);
       circle(this.x + this.Xscale * 0 + this.marge, // X
-        (this.y + this.sy) - (this.y + this.Yscale * (content[0] - content[min]) + this.Yscale * 2), // Y
-        2 // R
+        (this.y + this.sy - this.marge) - (this.Yscale * (content[0] - content[min])), // Y
+        4 // R
         );
 
       for (int i = 1; i < content.length; i++) {
-        circle(this.x + this.Xscale * i + this.marge, // X
-          (this.y + this.sy) - (this.y + this.Yscale * (content[i] - content[min]) + this.Yscale * 2), // Y
-          2 // R
-          );
 
+        stroke(0);
         line(this.x + this.Xscale * (i - 1) + this.marge, // X
-          (this.y + this.sy) - (this.y + this.Yscale * (content[i - 1] - content[min]) + this.Yscale * 2), // Y
+          (this.y + this.sy - this.marge) - (this.Yscale * (content[i - 1] - content[min])), // Y
           this.x + this.Xscale * i + this.marge, // X
-          (this.y + this.sy) - (this.y + this.Yscale * (content[i] - content[min]) + this.Yscale * 2) // Y
+          (this.y + this.sy - this.marge) - (this.Yscale * (content[i] - content[min])) // Y
           );
-
+        stroke(204, 102, 0);
+        fill(204, 102, 0);
+        circle(this.x + this.Xscale * i + this.marge, // X
+          (this.y + this.sy - this.marge) - (this.Yscale * (content[i] - content[min])), // Y
+          4 // R
+          );
+        fill(175);
+        stroke(175);
         line(this.x + this.Xscale * i + this.marge, // X
-          this.y + this.sy - this.marge/2, // Y
+          this.y + this.sy - this.marge*0.8, // Y
           this.x + this.Xscale * i + this.marge, // X
           this.y + this.sy - this.marge // Y
           );
