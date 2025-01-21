@@ -19,7 +19,7 @@ String[] JSemaine={"Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Diman
 String previousPanel = "edt";
 String[] graphOpt = {"Affluence à l'IUT", "Affluence au RU", "Examens", "Random"};
 String prevOpt = "";
-
+Event[][]  blbl;
 
 
 int nbH=12;
