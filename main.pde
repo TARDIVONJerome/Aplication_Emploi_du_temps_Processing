@@ -24,7 +24,7 @@ int annee = year();
 int mois = month();
 int jour = day();
 int DDS =annee*10000+mois*100+jour-Cweek(annee, mois, jour);
-int DFS =DDS+6;
+int FDS =DDS+6;
 
 boolean compTime(String time1, String time2) {
   time1 = time1.substring(0, 15);
@@ -239,13 +239,13 @@ void draw() {
 void mousePressed() {
   if (EdtWin[0].prochain.estClique(mouseX, mouseY)) {
     DDS = addDays(DDS,7);
-    DFS = addDays(DFS,7);
+    FDS = addDays(FDS,7);
     print(DDS);
   }
 
   if (EdtWin[0].precedent.estClique(mouseX, mouseY)) {
     DDS = subtractWeek(DDS);
-    DFS = subtractWeek(DFS);
+    FDS = subtractWeek(FDS);
     print(DDS);
   }
 }
