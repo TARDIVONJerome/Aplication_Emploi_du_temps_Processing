@@ -16,6 +16,9 @@ String[] items;
 Graph graph;
 int cooldown = 0;
 String[] JSemaine={"Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"};
+String previousPanel = "edt";
+String[] graphOpt = {"Affluence à l'IUT", "Affluence au RU", "Examens", "Random"};
+String prevOpt = "";
 
 
 
@@ -197,7 +200,7 @@ void settings(){
 }
 
 void setup() {
-  
+
   LSTSALLES=initSalles("salles.csv");
   LSTSOUSGROUPES=initSousGroupes("etudiants.csv");
   LSTPROFS=initProfs("enseignants.csv");
@@ -209,15 +212,16 @@ void setup() {
   }
   myFont = createFont("Arial", 32);
   textFont(myFont);
-  
+  textSize(18);
   contPanel = new Controls(0, 0, Displaywidth, 50);
-  contPanel.statDropdown.selected = "graph";
-  graph = new Graph(0, 50, 1080, 700);
-  //float[] data = peopleOverTime(20240902, 20250124);
-  float[] data = randomFloats(200);
-  printArray(data);
+  contPanel.statDropdown.selected = "edt";
+  graph = new Graph(0, 50, Displaywidth, Displayheight - 50);
+  //float[] data = examOverTime();
+  //float[] data = affluenceRUlist(20240902, 20250902);
+  //float[] data = peopleOverTime(20240902, 20250902);
+  float[] data = randomFloats(3);
   graph.setContent(data);
-  EdtWin[0] = new Edt(0, 50, Displaywidth, Displayheight-50);
+  EdtWin[0] = new Edt(0, 50, Displaywidth, Displayheight - 50);
 }
 
 void draw() {
@@ -227,12 +231,36 @@ void draw() {
     contPanel.clicked(mouseX, mouseY);
     cooldown = 10;
   }
-  if(SSTATS.equals("edt")){
+  if (SSTATS.equals("edt")) {
+    if (!previousPanel.equals("edt")) {
+        contPanel.groupDropdown.setItems(contPanel.addGroups(LSTSOUSGROUPES));
+        contPanel.groupDropdown.tag = "Select Group";
+        contPanel.salleDropdown.hidden = false;
+    }
     EdtWin[0].display();
-  } else if (SSTATS.equals("graph")){
+    previousPanel = "edt";
+  } else if (SSTATS.equals("graph")) {
+    if (!previousPanel.equals("graph")) {
+        contPanel.groupDropdown.setItems(graphOpt);
+        contPanel.groupDropdown.tag = "Select Graph";
+        contPanel.salleDropdown.hidden = true;
+    }
+    if (!prevOpt.equals(contPanel.groupDropdown.selected)) {
+      if (contPanel.groupDropdown.selected.equals("Affluence à l'IUT")){
+        graph.setContent(peopleOverTime(20240902, 20250902));
+      } else if (contPanel.groupDropdown.selected.equals("Affluence au RU")){
+        graph.setContent(affluenceRUlist(20240902, 20250902));
+      } else if (contPanel.groupDropdown.selected.equals("Examens")){
+        graph.setContent(examOverTime());
+      } else if (contPanel.groupDropdown.selected.equals("Random")){
+        graph.setContent(randomFloats(3));
+      }
+      prevOpt = contPanel.groupDropdown.selected;
+    }
     graph.display();
+    previousPanel = "graph";
   }
-  
+
   contPanel.display();
 }
 

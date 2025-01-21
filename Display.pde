@@ -312,26 +312,28 @@ class Controls extends Window {
   DropdownMenu groupDropdown;
   DropdownMenu salleDropdown;
   DropdownMenu statDropdown;
+  int marge = 10;
 
   Controls(int x, int y, int sx, int sy) {
     super(x, y, sx, sy);
-    groupDropdown = new DropdownMenu((int)x + 10,
+    
+    groupDropdown = new DropdownMenu((int)x + marge,
       (int)y + 10,
-      (int)(x + sx)/10,
+      (int)(x + sx)/3 - marge,
       (int)(y + sy)/2,
       "Select Group",
       addGroups(LSTSOUSGROUPES));
 
-    salleDropdown = new DropdownMenu((int)x + (x + sx)/5 + 10 * 2,
+    salleDropdown = new DropdownMenu((int)x + (x + sx)/3,
       (int)y + 10,
-      (int)(x + sx)/10,
+      (int)(x + sx)/3 - marge,
       (int)(y + sy)/2,
       "Select salle",
       addSalles(LSTSALLES));
 
-    statDropdown = new DropdownMenu((int)x + ((x + sx)/5) * 2 + 10 * 3,
+    statDropdown = new DropdownMenu((int)x + (x + sx)/3 * 2,
       (int)y + 10,
-      (int)(x + sx)/10,
+      (int)(x + sx)/3 - marge,
       (int)(y + sy)/2,
       "Select Stats",
       addStats(new String[]{"edt", "graph"}));
