@@ -130,7 +130,7 @@ float[] peopleOverTime(int date1, int date2){
 float[] affluenceRUlist(int date1, int date2){
   FloatList list = new FloatList();
   while(date1 < date2){
-    list.append(present(date1 + ""));
+    list.append(affluenceRU(date1 + ""));
     date1 = addDays(date1, 1);
   }
   
@@ -158,10 +158,11 @@ float[] examOverTime(){
 float[] randomFloats(int nb){
   float[] res = new float[nb];
   for (int i = 0; i < nb; i++){
-    res[i] = (int)random(0, 255);
+    res[i] = (int)random(64, 128);
   }
   return res;
 }
+
 
 float[] chargeOvertime(int date1, int date2){
   FloatList list = new FloatList();
