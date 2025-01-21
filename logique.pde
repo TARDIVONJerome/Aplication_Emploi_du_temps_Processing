@@ -131,24 +131,6 @@ float[] peopleOverTime(int date1, int date2){
   return list.toArray();
 }
 
-float[] randomFloats(int nb){
-  float[] res = new float[nb];
-  for (int i = 0; i < nb; i++){
-    res[i] = random(0, 500);
-  }
-  return res;
-}
-
-float[] peopleOverTime(int date1, int date2){
-  FloatList list = new FloatList();
-  while(date1 < date2){
-    list.append(present(date1 + ""));
-    date1 = addDays(date1, 1);
-  }
-  
-  return list.toArray();
-}
-
 float[] affluenceRUlist(int date1, int date2){
   FloatList list = new FloatList();
   while(date1 < date2){
