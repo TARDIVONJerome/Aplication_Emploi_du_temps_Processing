@@ -1,4 +1,4 @@
-Salle[] LSTSALLES; //<>// //<>//
+Salle[] LSTSALLES; //<>//
 SousGroupe[] LSTSOUSGROUPES;
 String[] LSTPROFS;
 Event[][] LSTEVENTS;
@@ -11,15 +11,15 @@ Edt[] EdtWin = new Edt[3];
 Controls contPanel;
 String SGROUPE = "";
 String SROOM = "";
-String SSTATS = "graph";
+String SSTATS = "edt";
 String[] items;
 Graph graph;
 int cooldown = 0;
-String[] JSemaine={"Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"};
+String[] JSemaine={"Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"};
 String previousPanel = "edt";
-String[] graphOpt = {"Affluence à l'IUT", "Affluence au RU", "Examens", "Random"};
+String[] graphOpt = {"Affluence à l'IUT", "Affluence au RU", "Examens", "Random", "Charge de travail"};
 String prevOpt = "";
-Event[][]  blbl;
+String prevGroup = "";
 
 
 int nbH=12;
@@ -45,22 +45,6 @@ boolean compTime(String time1, String time2) {
     return true;
   } else {
     return false;
-  }
-}
-
-void DecalageH() {
-  for (int u=0; u<LSTEVENTS.length; u++) {
-    if (LSTEVENTS[u]!=null) {
-    for (int i=LSTEVENTS[u].length-1; i>=0; i--) {
-      if (LSTEVENTS[u][i]!=null && LSTEVENTS[u][i].timeStart!=null &&  LSTEVENTS[u][i].timeEnd!=null) {
-        int decalageH=1;
-        if (20241026>AMJ(LSTEVENTS[u][i]))decalageH+=decalageH;
-        if (parseInt(LSTEVENTS[u][i].timeStart.substring(9, 11))+decalageH<10)LSTEVENTS[u][i].timeStart=LSTEVENTS[u][i].timeStart.substring(0, 9)+"0"+(parseInt(LSTEVENTS[u][i].timeStart.substring(9, 11))+decalageH)+LSTEVENTS[u][i].timeStart.substring(11, 16);
-        else LSTEVENTS[u][i].timeStart=LSTEVENTS[u][i].timeStart.substring(0, 9)+(parseInt(LSTEVENTS[u][i].timeStart.substring(9, 11))+decalageH)+LSTEVENTS[u][i].timeStart.substring(11, 16);
-        if (parseInt(LSTEVENTS[u][i].timeEnd.substring(9, 11))+decalageH<10)LSTEVENTS[u][i].timeEnd=LSTEVENTS[u][i].timeEnd.substring(0, 9)+"0"+(parseInt(LSTEVENTS[u][i].timeEnd.substring(9, 11))+decalageH)+LSTEVENTS[u][i].timeEnd.substring(11, 16);
-        else LSTEVENTS[u][i].timeEnd=LSTEVENTS[u][i].timeEnd.substring(0, 9)+(parseInt(LSTEVENTS[u][i].timeEnd.substring(9, 11))+decalageH)+LSTEVENTS[u][i].timeEnd.substring(11, 16);
-      }}
-    }
   }
 }
 
@@ -211,7 +195,7 @@ void triEvent(Event[] tab) {
   }
 }
 
-void settings(){
+void settings() {
   size(Displaywidth, Displayheight);
 }
 
@@ -226,18 +210,12 @@ void setup() {
     LSTEVENTS[i]=delNull(initEvents(files[i]));
     triEvent(LSTEVENTS[i]);
   }
-  DecalageH();
   myFont = createFont("Arial", 32);
   textFont(myFont);
   textSize(18);
   contPanel = new Controls(0, 0, Displaywidth, 50);
   contPanel.statDropdown.selected = "edt";
   graph = new Graph(0, 50, Displaywidth, Displayheight - 50);
-  //float[] data = examOverTime();
-  //float[] data = affluenceRUlist(20240902, 20250902);
-  //float[] data = peopleOverTime(20240902, 20250902);
-  float[] data = randomFloats(3);
-  graph.setContent(data);
   EdtWin[0] = new Edt(0, 50, Displaywidth, Displayheight - 50);
 }
 
@@ -273,7 +251,7 @@ void draw() {
       } else if (contPanel.groupDropdown.selected.equals("Examens")) {
         graph.setContent(examOverTime());
       } else if (contPanel.groupDropdown.selected.equals("Random")) {
-        graph.setContent(randomFloats(10));
+        graph.setContent(randomFloats(16));
       } else if (contPanel.groupDropdown.selected.equals("Charge de travail")) {
         contPanel.salleDropdown.setItems(contPanel.addGroups(LSTSOUSGROUPES));
         contPanel.salleDropdown.tag = "Select Group";
@@ -299,12 +277,10 @@ void mousePressed() {
   if (EdtWin[0].prochain.estClique(mouseX, mouseY)) {
     DDS = addDays(DDS, 7);
     FDS = addDays(FDS, 7);
-    print(DDS);
   }
 
   if (EdtWin[0].precedent.estClique(mouseX, mouseY)) {
     DDS = subtractWeek(DDS);
     FDS = subtractWeek(FDS);
-    print(DDS);
   }
 }

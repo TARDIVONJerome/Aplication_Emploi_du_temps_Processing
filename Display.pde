@@ -280,11 +280,13 @@ class Graph extends Window {
   }
 
   void display() {
+    
     textSize(8);
     fill(175);
     stroke(175);
     line(this.x + this.marge, this.y + this.marge, this.x + marge, this.y + this.sy - this.marge*0.8);
     line(this.x + this.marge, this.y + this.sy - this.marge, this.x + this.sx - marge, this.y + this.sy - this.marge);
+    
     if (content != null) {
       for (int i = (int)content[min]; i < content[max]; i += Yscale) {
         line(this.x + this.marge*0.8, // X
@@ -350,7 +352,7 @@ class Controls extends Window {
 
   Controls(int x, int y, int sx, int sy) {
     super(x, y, sx, sy);
-
+    
     groupDropdown = new DropdownMenu((int)x + marge,
       (int)y + 10,
       (int)(x + sx)/3 - marge,
@@ -370,7 +372,7 @@ class Controls extends Window {
       (int)(x + sx)/3 - marge,
       (int)(y + sy)/2,
       "Select Stats",
-      addStats(new String[]{"edt", "EdtExam", "EdtCommun", "graph"}));
+      addStats(new String[]{"edt", "graph"}));
   }
 
   void clicked(int ex, int ey) {
