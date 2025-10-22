@@ -5,14 +5,14 @@ PRODID:
 VERSION:2.0
 CALSCALE:GREGORIAN
 /* exemple d'evenement, cette application utilise le format ics pour stocker les évenements*/
-/*
-DTSTAMP -> Date de création de l'évenement
-DTSTART -> Date début 
-DTEND -> Date de fin de l'événement
-SUMMARY -> Cours (nom de l'événement)
-LOCATION -> Salle
-DESCRIPTION -> Groupe(s) concerné(s) et Enseignant
-*/
+
+//DTSTAMP -> Date de création de l'évenement
+//DTSTART -> Date début 
+//DTEND -> Date de fin de l'événement
+//SUMMARY -> Cours (nom de l'événement)
+//LOCATION -> Salle
+//DESCRIPTION -> Groupe(s) concerné(s) et Enseignant
+
 BEGIN:VEVENT
 DTSTAMP:20250109T075623Z
 DTSTART:20241118T073000Z
@@ -27,3 +27,4 @@ LAST-MODIFIED:20250109T075623Z
 SEQUENCE:2141590296
 END:VEVENT
 END:VCALENDAR
+
