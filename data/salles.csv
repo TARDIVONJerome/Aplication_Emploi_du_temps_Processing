@@ -1,4 +1,4 @@
-Salle;Capacit�;Type
+Salle;Capacité;Type
 IN0.00;30;Normale
 IN0.01;18;Normale
 IN0.03;24;Normale
@@ -7,7 +7,7 @@ IN0.05;28;Normale
 IN0.07;28;Normale
 IN0.08;28;Normale
 IN0.09;28;Normale
-IN1.03;28;R�seau
+IN1.03;28;Réseau
 IN1.05;28;Informatique
 IN1.06;28;Informatique
 IN1.07;28;Informatique
@@ -15,3 +15,6 @@ IN1.08;28;Informatique
 IN1.09;28;Informatique
 IN2.01;24;Informatique
 IN2.02;24;Informatique
+
+// entrez ici les différentes salles ainsi que leur capacité et leur type.
+
